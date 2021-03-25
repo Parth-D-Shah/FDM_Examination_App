@@ -25,3 +25,14 @@ db.all("SELECT * FROM test", (err, result) =>
     });
 });
 
+
+app.get('/getfromdb', (req, res) =>
+{
+db.all("SELECT fname FROM test where id = 1", (err, result) =>
+    {
+        if (err) {console.log(err.message);}
+
+        else{res.send(result);}
+    });
+});
+
