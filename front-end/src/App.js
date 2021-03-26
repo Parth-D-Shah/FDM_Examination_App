@@ -24,7 +24,6 @@ function App() {
         {screen === "login" && (
           <div>
             <Login />
-            <Button className="mt-5" onClick={createUser}> Create User </Button>
           </div>
           )}
 

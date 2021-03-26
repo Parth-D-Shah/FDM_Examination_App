@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
+import './Login.css';
 import {Form, Button} from 'react-bootstrap' // Container for all Rows/Components
 import {useState} from 'react'; // React states to store API info
 
@@ -32,9 +33,11 @@ const Login = () => {
     
 
     return (
+        <div id="positioning">
         <Form onSubmit={handleSubmit}>
+            <h1 id="heading">Online Examination Web App</h1>
             <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label id="label">Email Address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" name="email" onChange={handleChange} required/>
                 <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
@@ -42,14 +45,15 @@ const Login = () => {
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label id="label">Account Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" name="pwd" onChange={handleChange} required/>
             </Form.Group>
             
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" block>
                 Submit
             </Button>
         </Form>
+        </div>
     
     )
 }
