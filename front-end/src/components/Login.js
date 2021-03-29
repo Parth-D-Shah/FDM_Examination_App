@@ -35,7 +35,7 @@ const Login = () => {
     return (
         <div id="positioning">
         <Form onSubmit={handleSubmit}>
-            <h1 id="heading">Online Examination Web App</h1>
+            <h1 id="heading">Online Examination Application</h1>
             <Form.Group controlId="formBasicEmail">
                 <Form.Label id="label">Email Address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" name="email" onChange={handleChange} required/>
