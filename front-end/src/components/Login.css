@@ -6,11 +6,36 @@ body{
     color: white;
 }
 #heading{
-    color: white;
+    color: #4169e1 !important;
 }
 #positioning{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.loginLogo
+{
+    height: auto;
+    width: 5em;
+}
+.btnGroup
+{
+    width: 100%;
+}
+.btnSubmit
+{
+    width: 50%;
+    background-color: #4169e1;
+}
+.btnAccessCode
+{
+    width: 50%;
+    border-color: white;
+    color:white;
+}
+.btnAccessCode:hover
+{
+    background-color: #4169e1;
 }

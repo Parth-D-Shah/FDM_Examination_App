@@ -21,11 +21,6 @@
     width: 7em;
 }
 
-.card
-{
-    width: 20em;
-}
-
 .welcomeMsg
 {
     color:white;
@@ -40,11 +35,15 @@
 
 .outlineButton
 {
-    color: white !important;
-    border-color: white !important;
+    color: white;
+    border-color: white;
+}
+.outlineButton:hover
+{
+    background-color: #4169e1;
 }
 
 .normalButton
 {
-    background-color: #4169e1 !important;
+    background-color: #4169e1;
 }
