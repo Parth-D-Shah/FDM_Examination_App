@@ -25,7 +25,6 @@ app.post("/createUser", (req, res) =>
         if (err){console.log(err.message)}
     })
 })
-
 app.post("/createUserTest", (req, res) =>
 {
     var fname1 = "Rikhil"
