@@ -78,7 +78,7 @@ app.post('getProvUser', (req, res) =>
 {
     const {accessKey} = req.body;
 
-    db.all(`SELECT ... = '${accessKey}'`, (err, row) =>
+    db.all(`SELECT id, fname, lname, accounType FROM provisional_user WHERE accessKey = '${accessKey}'`, (err, row) =>
     {
         if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
 
