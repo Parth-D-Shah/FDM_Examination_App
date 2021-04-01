@@ -74,7 +74,7 @@ app.post('/login', (req, res) =>
 });
 
 
-app.post('getProvUser', (req, res) =>
+app.post('/getProvUser', (req, res) =>
 {
     const {accessKey} = req.body;
 
@@ -88,11 +88,11 @@ app.post('getProvUser', (req, res) =>
     })
 })
 
-app.post('getUser', (req, res) =>
+app.post('/getUser', (req, res) =>
 {
-    const {idNum} = req.body;
+    const {id} = req.body;
 
-    db.all(`SELECT id, fname, lname, email, accounType FROM user WHERE id = '${idNum}'`, (err, row) =>
+    db.all(`SELECT id, fname, lname, email, accountType FROM user WHERE id = '${id}'`, (err, row) =>
     {
         if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
 
