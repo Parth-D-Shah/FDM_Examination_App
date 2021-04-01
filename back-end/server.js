@@ -88,7 +88,20 @@ app.post('getProvUser', (req, res) =>
     })
 })
 
+app.post('getUser', (req, res) =>
+{
+    const {idNum} = req.body;
 
+    db.all(`SELECT id, fname, lname, email, accounType FROM user WHERE id = '${idNum}'`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else if (row.length === 0) { res.status(400).json({message: "invalid ID"}) }
+
+        else { res.status(200).json(row[0]) }
+    })
+})
+// get user
 // app.post("/createUserTest", (req, res) =>
 // {
 //     var fname1 = "Rikhil"
