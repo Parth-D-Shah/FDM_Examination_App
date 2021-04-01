@@ -39,17 +39,19 @@ const Dashboard = () => {
     return (
         <div>
             <div id='textFormatting'>
-                Name: Rikhil Shah
-                <br/>
-                ID: 00001
-                <br/>
-                Email: ec19148@qmul.ac.uk &nbsp;
-                <Button variant="outline-primary" onClick={handleEmailChange}>
+                Name: <br />Rikhil Shah
+                <br/><br/>
+                ID: <br />00001
+                <br/><br/>
+                Email: <br /><input value='ec19148@qmul.ac.uk' type="text" disabled></input>
+                <br />
+                <Button variant="outline-primary" id='buttonSpacing' onClick={handleEmailChange}>
                     Change
                 </Button>
-                <br/>
-                Pasword: ****************** &nbsp; &nbsp;
-                <Button variant="outline-primary" onClick={handlePasswordChange}>
+                <br/><br />
+                Pasword: <br /><input value='******************' type="text" disabled></input>
+                <br />
+                <Button variant="outline-primary" id='buttonSpacing' onClick={handlePasswordChange}>
                     Change
                 </Button>
             </div>
