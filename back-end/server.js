@@ -8,7 +8,7 @@ app.use(express.json());
 
 const db = new sqlite3.Database('./OEA_System.db', err =>
 {
-    if (err) {console.log(err.message);}
+    if (err) {console.log(err.message); res.status(500).json({message: err.message})}
     else {console.log("Connected to OEA_System database");}
 });
 
@@ -23,7 +23,7 @@ app.post("/createUser", (req, res) =>
     const {authkey, fname, lname, accountType} = req.body
     db.run(`INSERT INTO provisional_user (authkey, fname, lname, accountType) VALUES ('${authkey}', '${fname}', '${lname}', '${accountType}')`, (err) =>
     {
-        if (err){console.log(err.message)}
+        if (err){console.log(err.message); }
         else {res.status(200).json({message: "provisional user successfully created"})}
     })
 
@@ -37,7 +37,7 @@ app.post("/submitUser", (req, res) =>
     {
         db.run(`INSERT INTO user (fname, lname, email, password, accountType) VALUES ('${fname}', '${lname}', '${email}', '${hash}', '${accountType}')`, (err) =>
         {
-            if (err){console.log(err.message)}
+            if (err){console.log(err.message); res.status(500).json({message: err.message})}
             else {res.status(200).json({message: "user successfully created"})}
         })
     })
@@ -72,6 +72,21 @@ app.post('/login', (req, res) =>
 
     });
 });
+
+
+app.post('getProvUser', (req, res) =>
+{
+    const {accessKey} = req.body;
+
+    db.all(`SELECT ... = '${accessKey}'`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else if (row.length === 0) { res.status(400).json({message: "invalid access key"}) }
+
+        else { res.status(200).json(row[0]) }
+    })
+})
 
 
 // app.post("/createUserTest", (req, res) =>
