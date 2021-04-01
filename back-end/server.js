@@ -19,6 +19,14 @@ app.listen(3001, () =>
 
 app.post("/createUser", (req, res) =>
 {
+    const {authkey, fname, lname, accountType} = req.body
+    db.run(`INSERT INTO provisional_user (authkey, fname, lname, accountType) VALUES ('${authkey}', '${fname}', '${lname}', '${accountType}')`, (err) =>
+    {
+        if (err){console.log(err.message)}
+    })
+})
+app.post("/createUserTest", (req, res) =>
+{
     var fname1 = "Rikhil"
     var sname1 = "Shah"
     var email1 = "ec19148atqmul.ac.uk"
