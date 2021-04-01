@@ -89,7 +89,7 @@ const Login = () => {
                     </Button>
 
                     <Button className="btnAccessCode ml-5" variant="outline-primary" onClick={handleAccessCode}>
-                        Have an access code?
+                        Have an access key?
                     </Button>
                 </ButtonGroup>
             </Form>

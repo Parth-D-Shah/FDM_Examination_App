@@ -17,34 +17,33 @@ app.listen(3001, () =>
     console.log("Server running on port 3001")
 });
 
+
 app.post("/createUser", (req, res) =>
 {
     const {authkey, fname, lname, accountType} = req.body
     db.run(`INSERT INTO provisional_user (authkey, fname, lname, accountType) VALUES ('${authkey}', '${fname}', '${lname}', '${accountType}')`, (err) =>
     {
         if (err){console.log(err.message)}
+        else {res.status(200).json({message: "provisional user successfully created"})}
     })
+
 })
 
-app.post("/createUserTest", (req, res) =>
+app.post("/submitUser", (req, res) =>
 {
-    var fname1 = "Rikhil"
-    var sname1 = "Shah"
-    var email1 = "ec19148atqmul.ac.uk"
-    var accountType1 = "sysadmin"
-    bcrypt.hash("password", 10).then ( (hash) => 
+    const {fname, lname, email, password, accountType} = req.body
+    
+    bcrypt.hash(password, 10).then ( (hash) => 
     {
-        db.run(`INSERT INTO user (fname, sname, email, password, accountType) VALUES ('Rikhil', 'Shah', 'email', '${hash}', 'sysadmin')`, (err) =>
+        db.run(`INSERT INTO user (fname, lname, email, password, accountType) VALUES ('${fname}', '${lname}', '${email}', '${hash}', '${accountType}')`, (err) =>
         {
-            if (err)
-            {
-                console.log(err.message)
-            }
+            if (err){console.log(err.message)}
+            else {res.status(200).json({message: "user successfully created"})}
         })
     })
+
 })
 
-// app.post("/submitUser")
 
 app.post('/login', (req, res) =>
 {
@@ -73,3 +72,22 @@ app.post('/login', (req, res) =>
 
     });
 });
+
+
+// app.post("/createUserTest", (req, res) =>
+// {
+//     var fname1 = "Rikhil"
+//     var sname1 = "Shah"
+//     var email1 = "ec19148atqmul.ac.uk"
+//     var accountType1 = "sysadmin"
+//     bcrypt.hash("password", 10).then ( (hash) => 
+//     {
+//         db.run(`INSERT INTO user (fname, sname, email, password, accountType) VALUES ('Rikhil', 'Shah', 'email', '${hash}', 'sysadmin')`, (err) =>
+//         {
+//             if (err)
+//             {
+//                 console.log(err.message)
+//             }
+//         })
+//     })
+// })
