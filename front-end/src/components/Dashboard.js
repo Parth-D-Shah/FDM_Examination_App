@@ -60,7 +60,7 @@ const Dashboard = () => {
                 </Row>
                 
 
-                {/* <CardDeck className="mt-5">
+                <CardDeck className="mt-5">
                     <Card bg="dark" text="white" className="card text-center mr-5">
                         <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconYourAccount}/>
                         <Card.Body>
@@ -107,8 +107,8 @@ const Dashboard = () => {
 
                     
                 
-                </CardDeck> */}
-                {<YourAccount/>}
+                </CardDeck>
+                {/* {<YourAccount/>} */}
                 
 
 

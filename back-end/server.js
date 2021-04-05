@@ -1,21 +1,85 @@
 const express = require('express');
 const app = express();
+const cors = require('cors')
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt')
-
+const cookieParser = require('cookie-parser')
+const {sign, verify, decode} = require("jsonwebtoken")
 
 app.use(express.json());
+app.use(cors())
+app.use(cookieParser())
 
+// Connecting to db and listening on port
 const db = new sqlite3.Database('./OEA_System.db', err =>
 {
     if (err) {console.log(err.message); res.status(500).json({message: err.message})}
-    else {console.log("Connected to OEA_System database");}
+
+    else 
+    {
+        app.listen(3001, () =>
+        {
+            console.log("Server running on port 3001")
+        });
+        console.log("Connected to OEA_System database");
+    }
 });
 
-app.listen(3001, () =>
+// Login endpoint
+app.post('/login', (req, res) =>
 {
-    console.log("Server running on port 3001")
+    const {email, password} = req.body;
+
+    db.all(`SELECT id, email, password FROM user where email = '${email}'`, (err, row) =>
+    {
+        if (row.length === 0) {res.status(401).json({message: "invalid email address and/or password"})}
+
+        else
+        {
+            const dbPassword = row[0].password
+
+            bcrypt.compare(password, dbPassword).then( (match) =>
+            {
+                if (!match)
+                {
+                    res.status(401).json({message: "invalid email address and/or password"})
+                }
+                else
+                {
+                    const user = row[0]
+                    const accessToken = sign( {id:user.id, email:user.email}, "secret" )
+                    res.cookie("access-token", accessToken, { maxAge: 86400000, httpOnly: true, secure: true })
+                    res.status(200).json({message: "login successful"})
+                }
+            })
+        }
+
+    });
 });
+
+// JWT authorisation of accessToken in cookie
+app.get("/loggedIn", (req, res) =>
+{
+    const accessToken = req.cookies["access-token"]
+    if (!accessToken)
+    {
+        res.status(401).json( {message: "not logged in"} )
+    }
+    else
+    {
+        try
+        {
+            const tokenValid = verify(accessToken, "secret")
+            if (tokenValid)
+            {
+                const decodedToken = decode(accessToken, {complete: true})
+                res.status(200).json(decodedToken.payload)
+            }
+        }
+        catch (err) { res.status(401).json( {message: "not logged in"} ) }
+    }
+})
+
 
 
 app.post("/createUser", (req, res) =>
@@ -45,35 +109,6 @@ app.post("/submitUser", (req, res) =>
 })
 
 
-app.post('/login', (req, res) =>
-{
-    const {email, password} = req.body;
-
-    db.all(`SELECT password FROM user where email = '${email}'`, (err, row) =>
-    {
-        if (row.length === 0) {res.status(401).json({message: "Invalid email address or password"})}
-
-        else
-        {
-            const dbPassword = row[0].password
-
-            bcrypt.compare(password, dbPassword).then( (match) =>
-            {
-                if (!match)
-                {
-                    res.status(401).json({message: "Invalid email address or password"})
-                }
-                else
-                {
-                    res.status(200).json({message: "login successful"})
-                }
-            })
-        }
-
-    });
-});
-
-
 app.post('/getProvUser', (req, res) =>
 {
     const {accessKey} = req.body;
@@ -101,21 +136,3 @@ app.post('/getUser', (req, res) =>
         else { res.status(200).json(row[0]) }
     })
 })
-// get user
-// app.post("/createUserTest", (req, res) =>
-// {
-//     var fname1 = "Rikhil"
-//     var sname1 = "Shah"
-//     var email1 = "ec19148atqmul.ac.uk"
-//     var accountType1 = "sysadmin"
-//     bcrypt.hash("password", 10).then ( (hash) => 
-//     {
-//         db.run(`INSERT INTO user (fname, sname, email, password, accountType) VALUES ('Rikhil', 'Shah', 'email', '${hash}', 'sysadmin')`, (err) =>
-//         {
-//             if (err)
-//             {
-//                 console.log(err.message)
-//             }
-//         })
-//     })
-// })

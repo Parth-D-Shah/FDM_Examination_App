@@ -4,17 +4,29 @@ import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap' // Container
 import {useState} from 'react'; // React states to store API info
 import logo from '../assets/logo-blue.png'
 import Swal from 'sweetalert2'
+import Axios from 'axios' // for handling API Call
 
-const Login = () => {
+const Login = ({updateLoggedIn}) => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loginFailed, setLoginFailed] = useState(false)
 
-
-    function handleSubmit(event)
+    async function handleSubmit(event)
     {
         event.preventDefault(event);
-        console.log(email, password)
+
+        var loginResponseStatus = null
+        
+        try
+        {
+            var loginResponse = await Axios.post("http://localhost:3001/login", { email: email, password: password })
+            loginResponseStatus = loginResponse.status    
+        }
+        catch (err) { if (err.response.status === 401) {loginResponseStatus = err.response.status} }
+
+        if (loginResponseStatus === 200) { updateLoggedIn(true) }
+        else { setLoginFailed(true) }
     }
 
     function handleChange(event)
@@ -61,6 +73,7 @@ const Login = () => {
         <div id="positioning">
 
             <Form onSubmit={handleSubmit}>
+                
                 <Row className="align-items-center mb-4">
                     <Col className="d-flex justify-content-center" xs="auto">
                         <img className="loginLogo img-fluid" src={logo} alt="Logo"/>
@@ -92,7 +105,13 @@ const Login = () => {
                         Have an access key?
                     </Button>
                 </ButtonGroup>
+                
+                {loginFailed === true && (
+                    <p className="invalidCredentials text-center mt-3"> Invalid email address and/or password </p>
+                )}
+                
             </Form>
+        
         </div>
     
     )

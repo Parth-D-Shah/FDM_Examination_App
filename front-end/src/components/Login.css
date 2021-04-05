@@ -39,3 +39,9 @@ body{
 {
     background-color: #4169e1;
 }
+
+.invalidCredentials
+{
+    color: red;
+    font-size: 1.1em;
+}
