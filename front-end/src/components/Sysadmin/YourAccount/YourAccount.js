@@ -1,9 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
+import {Button} from 'react-bootstrap'; // Container for all Rows/Components
+
 import './YourAccount.css'
-import {Form, Container, Button, ButtonGroup} from 'react-bootstrap'; // Container for all Rows/Components
+
 import Swal from 'sweetalert2'
-import {useState} from 'react'; // React states to store API info
-const Dashboard = () => {
+
+const Dashboard = ({loggedInUser}) => {
     function handleSubmit(event)
     {
         event.preventDefault(event);
@@ -38,20 +40,20 @@ const Dashboard = () => {
 
     return (
         <div>
-            <div id='textFormatting'>
+            <div id='textFormatting' className="">
                 Name: <br />Rikhil Shah
                 <br/><br/>
                 ID: <br />00001
                 <br/><br/>
                 Email: <br /><input value='ec19148@qmul.ac.uk' type="text" disabled></input>
                 <br />
-                <Button variant="outline-primary" id='buttonSpacing' onClick={handleEmailChange}>
+                <Button className="outlineButton" variant="outline-primary" id='buttonSpacing' onClick={handleEmailChange}>
                     Change
                 </Button>
                 <br/><br />
                 Pasword: <br /><input value='******************' type="text" disabled></input>
                 <br />
-                <Button variant="outline-primary" id='buttonSpacing' onClick={handlePasswordChange}>
+                <Button className="outlineButton" variant="outline-primary" id='buttonSpacing' onClick={handlePasswordChange}>
                     Change
                 </Button>
             </div>

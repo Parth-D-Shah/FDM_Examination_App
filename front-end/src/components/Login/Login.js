@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import './Login.css';
 import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap' // Container for all Rows/Components
 import {useState} from 'react'; // React states to store API info
-import logo from '../assets/logo-blue.png'
+import logo from '../../assets/logo-blue.png'
 import Swal from 'sweetalert2'
 import Axios from 'axios' // for handling API Call
 
@@ -20,7 +20,7 @@ const Login = ({updateLoggedIn}) => {
         
         try
         {
-            var loginResponse = await Axios.post("http://localhost:3001/login", { email: email, password: password })
+            var loginResponse = await Axios.post("http://localhost:3001/login", { email: email, password: password }, {withCredentials: true })
             loginResponseStatus = loginResponse.status    
         }
         catch (err) { if (err.response.status === 401) {loginResponseStatus = err.response.status} }

@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser')
 const {sign, verify, decode} = require("jsonwebtoken")
 
 app.use(express.json());
-app.use(cors())
+app.use(cors({credentials: true, origin: true}))
 app.use(cookieParser())
 
 // Connecting to db and listening on port
@@ -20,8 +20,8 @@ const db = new sqlite3.Database('./OEA_System.db', err =>
         app.listen(3001, () =>
         {
             console.log("Server running on port 3001")
+            console.log("Connected to OEA_System database");
         });
-        console.log("Connected to OEA_System database");
     }
 });
 
@@ -30,7 +30,7 @@ app.post('/login', (req, res) =>
 {
     const {email, password} = req.body;
 
-    db.all(`SELECT id, email, password FROM user where email = '${email}'`, (err, row) =>
+    db.all(`SELECT * FROM user where email = '${email}'`, (err, row) =>
     {
         if (row.length === 0) {res.status(401).json({message: "invalid email address and/or password"})}
 
@@ -47,8 +47,8 @@ app.post('/login', (req, res) =>
                 else
                 {
                     const user = row[0]
-                    const accessToken = sign( {id:user.id, email:user.email}, "secret" )
-                    res.cookie("access-token", accessToken, { maxAge: 86400000, httpOnly: true, secure: true })
+                    const accessToken = sign( {id:user.id, email:user.email, fname:user.fname, lname:user.lname, accountType:user.accountType}, "secret" )
+                    res.cookie("access-token", accessToken, { maxAge: 86400000, /*httpOnly: true, secure: true*/ })
                     res.status(200).json({message: "login successful"})
                 }
             })
