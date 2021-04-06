@@ -108,8 +108,8 @@ app.put("/submitUser", (req, res) =>
     const {email, password, accessKey} = req.body
     const id = parseInt(accessKey.substring(0, accessKey.indexOf('-')))
     const accessKeyInDB = accessKey.substring(accessKey.indexOf('-')+1)
-    console.log(id)
-    console.log(accessKeyInDB)
+    //console.log(id)
+    //console.log(accessKeyInDB)
 
     db.all(`SELECT * FROM user where id=${id}`, (err, row) =>
     {
@@ -140,37 +140,15 @@ app.put("/submitUser", (req, res) =>
                 }
             })
         }
-
     });
-    
-
 })
 
-
-app.post('/getProvUser', (req, res) =>
+app.get('/getUsers', (req, res) =>
 {
-    const {accessKey} = req.body;
-
-    db.all(`SELECT id, fname, lname, accounType FROM provisional_user WHERE accessKey = '${accessKey}'`, (err, row) =>
+    db.all(`SELECT id, fname, lname, email, accountType FROM user`, (err, row) =>
     {
         if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
 
-        else if (row.length === 0) { res.status(400).json({message: "invalid access key"}) }
-
-        else { res.status(200).json(row[0]) }
-    })
-})
-
-app.post('/getUser', (req, res) =>
-{
-    const {id} = req.body;
-
-    db.all(`SELECT id, fname, lname, email, accountType FROM user WHERE id = '${id}'`, (err, row) =>
-    {
-        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
-
-        else if (row.length === 0) { res.status(400).json({message: "invalid ID"}) }
-
-        else { res.status(200).json(row[0]) }
+        else { res.status(200).json(row) }
     })
 })
