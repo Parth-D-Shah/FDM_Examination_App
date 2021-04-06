@@ -143,6 +143,21 @@ app.put("/submitUser", (req, res) =>
     });
 })
 
+app.put("/addAccessKey", (req, res) =>
+{
+    const {id, accessKey} = req.body
+    
+    bcrypt.hash(accessKey, 10).then ( (hash) =>
+    {
+        db.run(`UPDATE user SET accessKey='${hash}' WHERE id=${id}`, (err) =>
+        {
+            if (err) {console.log(err.message); res.status(500).json({message: err.message})}
+            else {res.status(200).json({message: id})}
+        })
+    })
+})
+
+
 app.get('/getUsers', (req, res) =>
 {
     db.all(`SELECT id, fname, lname, email, accountType FROM user`, (err, row) =>
