@@ -1,10 +1,6 @@
 #textFormatting{
     color:white;
-    position: absolute;
     font-size: 200%;
-    left: 50%;
-    top: 55%;
-    transform: translate(-50%, -50%);
 }
 
 #buttonSpacing{

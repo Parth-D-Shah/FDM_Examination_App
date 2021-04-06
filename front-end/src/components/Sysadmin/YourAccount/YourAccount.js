@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import {Button} from 'react-bootstrap'; // Container for all Rows/Components
 
+
 import './YourAccount.css'
 
 import Swal from 'sweetalert2'
@@ -39,8 +40,10 @@ const Dashboard = ({loggedInUser}) => {
     }
 
     return (
-        <div>
-            <div id='textFormatting' className="">
+        <div class="row">
+            <div class="col">
+            </div>
+            <div className="d-flex justify-content-center" id="textFormatting" className="w-20 p-3">
                 Name: <br />Rikhil Shah
                 <br/><br/>
                 ID: <br />00001
@@ -57,7 +60,10 @@ const Dashboard = ({loggedInUser}) => {
                     Change
                 </Button>
             </div>
+            <div class="col">
+            </div>
         </div>
+        
     )
     }
     
