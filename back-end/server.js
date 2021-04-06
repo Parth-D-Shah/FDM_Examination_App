@@ -84,27 +84,65 @@ app.get("/loggedIn", (req, res) =>
 
 app.post("/createUser", (req, res) =>
 {
-    const {authkey, fname, lname, accountType} = req.body
-    db.run(`INSERT INTO provisional_user (authkey, fname, lname, accountType) VALUES ('${authkey}', '${fname}', '${lname}', '${accountType}')`, (err) =>
+    const {fname, lname, accountType, accessKey} = req.body
+    bcrypt.hash(accessKey, 10).then ( (hash) =>
     {
-        if (err){console.log(err.message); }
-        else {res.status(200).json({message: "provisional user successfully created"})}
-    })
-
-})
-
-app.post("/submitUser", (req, res) =>
-{
-    const {fname, lname, email, password, accountType} = req.body
-    
-    bcrypt.hash(password, 10).then ( (hash) => 
-    {
-        db.run(`INSERT INTO user (fname, lname, email, password, accountType) VALUES ('${fname}', '${lname}', '${email}', '${hash}', '${accountType}')`, (err) =>
+        db.run(`INSERT INTO user (fname, lname, accountType, accessKey) VALUES ('${fname}', '${lname}', '${accountType}', '${hash}')`, (err) =>
         {
             if (err){console.log(err.message); res.status(500).json({message: err.message})}
-            else {res.status(200).json({message: "user successfully created"})}
+            else
+            {
+                db.all(`select last_insert_rowid()`, (err, row) =>
+                {
+                    if (err){console.log(err.message); res.status(500).json({message: err.message})}
+            
+                    else {res.status(200).json({message: row[0]["last_insert_rowid()"]})}
+                })
+            }
         })
     })
+})
+
+app.put("/submitUser", (req, res) =>
+{
+    const {email, password, accessKey} = req.body
+    const id = parseInt(accessKey.substring(0, accessKey.indexOf('-')))
+    const accessKeyInDB = accessKey.substring(accessKey.indexOf('-')+1)
+    console.log(id)
+    console.log(accessKeyInDB)
+
+    db.all(`SELECT * FROM user where id=${id}`, (err, row) =>
+    {
+        if (err){console.log(err.message); res.status(500).json({message: err.message})}
+        
+        else if (row.length === 0) {res.status(401).json({message: "invalid access key"})}
+
+        else
+        {
+            const dbAccessKey = row[0].accessKey
+
+            bcrypt.compare(accessKeyInDB, dbAccessKey).then( (match) =>
+            {
+                if (!match)
+                {
+                    res.status(401).json({message: "invalid access key"})
+                }
+                else
+                {
+                    bcrypt.hash(password, 10).then ( (hash) => 
+                    {
+                        db.run(`UPDATE user SET email='${email}', password='${hash}', accessKey=NULL WHERE id=${id}`, (err) =>
+                        {
+                            if (err){console.log(err.message); res.status(500).json({message: err.message})}
+                            else {res.status(200).json({message: "user details successfully updated"})}
+                        })
+                    })
+                }
+            })
+        }
+
+    });
+    
 
 })
 

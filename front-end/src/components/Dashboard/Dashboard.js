@@ -5,6 +5,7 @@ import {Container, Navbar, Nav, Button, Row, Col} from 'react-bootstrap'; // Con
 import ScreenMessage from '../ScreenMessage/ScreenMessage'
 import Sysadmin from './Sysadmin'
 import YourAccount from '../Sysadmin/YourAccount/YourAccount'
+import ManageUsers from '../Sysadmin/ManageUsers/ManageUsers'
 
 import logo from '../../assets/logo-blue.png'
 
@@ -78,8 +79,9 @@ const Dashboard = () => {
             <Container>
 
                 <ScreenMessage loggedInUser={loggedInUser} currentScreen={chosenScreen}/>
-                {loggedInUser.accountType === "sysadmin" && chosenScreen === "dashboard" && (<Sysadmin changeScreen={changeScreen} />)}
+                {loggedInUser.accountType === "System Admin" && chosenScreen === "dashboard" && (<Sysadmin changeScreen={changeScreen} />)}
                 {chosenScreen === "yourAccount" && (<YourAccount loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "manageUsers" && (<ManageUsers loggedInUser={loggedInUser}/>)}
             
             </Container>
 
