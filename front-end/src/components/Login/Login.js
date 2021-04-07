@@ -19,6 +19,7 @@ const Login = ({updateLoggedIn}) => {
     const [password, setPassword] = useState("")
     const [loginFailed, setLoginFailed] = useState(false)
     const [useAccessKey, setUseAccessKey] = useState(false)
+    const [accessKey, setAccessKey] = useState(null)
 
     async function handleSubmit(event)
     {
@@ -58,11 +59,11 @@ const Login = ({updateLoggedIn}) => {
             }
         })
 
-        if (userAccessKey) {setUseAccessKey(true)} 
+        if (userAccessKey) {setUseAccessKey(true); setAccessKey(userAccessKey)} 
     }
     
 
-    if (useAccessKey) {return (<AccessKey />)}
+    if (useAccessKey) {return (<AccessKey accessKey={accessKey}/>)}
     
     return (
         <div id="positioning">

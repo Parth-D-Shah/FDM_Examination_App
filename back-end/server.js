@@ -25,6 +25,7 @@ const db = new sqlite3.Database('./OEA_System.db', err =>
     }
 });
 
+
 // Login endpoint
 app.post('/login', (req, res) =>
 {
@@ -56,6 +57,7 @@ app.post('/login', (req, res) =>
 
     });
 });
+
 
 // JWT authorisation of accessToken in cookie
 app.get("/loggedIn", (req, res) =>
@@ -118,14 +120,34 @@ app.post("/checkAccessKey", (req, res) =>
         else
         {
             const dbAccessKey = row[0].accessKey
-
-            bcrypt.compare(accessKeyInDB, dbAccessKey).then( (match) =>
+            
+            if (dbAccessKey === null) {res.status(401).json({message: "invalid access key"})}
+            
+            else
             {
-                if (!match) {res.status(401).json({message: "invalid access key"})}
-                
-                else {res.status(200).json({message: "valid access key"})}
-            })
+                bcrypt.compare(accessKeyInDB, dbAccessKey).then( (match) =>
+                {
+                    if (!match) {res.status(401).json({message: "invalid access key"})}
+                    
+                    else {res.status(200).json({message: "valid access key"})}
+                })
+            }
         }
+    });
+})
+
+
+app.post("/getUserDetails", (req, res) =>
+{
+    const {id} = req.body
+
+    db.all(`SELECT id, fname, lname, email, accountType FROM user where id=${id}`, (err, row) =>
+    {
+        if (err){console.log(err.message); res.status(500).json({message: err.message})}
+        
+        else if (row.length === 0) {res.status(401).json({message: "invalid id"})}
+
+        else {res.status(200).json({message: row[0]})}
     });
 })
 

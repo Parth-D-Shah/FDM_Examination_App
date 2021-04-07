@@ -2,9 +2,82 @@ import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import './AccessKey.css';
 import {Container, Form, Row, Col, Button, ButtonGroup} from 'react-bootstrap' // Container for all Rows/Components
 
-import logo from '../../assets/logo-blue.png'
+import {useState, useEffect} from 'react';
 
-const AccessKey = () => {
+import Axios from 'axios' // for handling API Call
+import Swal from 'sweetalert2'
+
+import App from '../../App.js'
+
+const AccessKey = ({accessKey}) => {
+
+    const [userDetails, setUserDetails] = useState({fname:"Your first name", lname:"Your last name", id:"Your ID", accountType:"Your account type"})
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [complete, setComplete] = useState(false)
+
+    function padDigits(number, digits) {return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number}
+
+    //Effect Hook 
+    useEffect( () =>
+    {
+        // POPULATING LISTS OF USERS WHICH CAN BE EDITED
+        async function fetchUserDetails ()
+        {
+            var id = parseInt(accessKey.substring(0, accessKey.indexOf('-')))
+            
+            try
+            {
+                var userDetailsResponse = await Axios.post("http://localhost:3001/getUserDetails", { id:id }, {withCredentials: true})
+                setUserDetails(userDetailsResponse.data.message)
+                setEmail(userDetailsResponse.data.message.email)
+                console.log(userDetailsResponse.data.message)
+            }
+            catch (err) { console.log(err) }
+        }
+        
+        if (accessKey !== null) {fetchUserDetails()}
+
+    }, [accessKey]) // Updates when CREATE USER access key generated
+
+
+    function handleChange(event)
+    {
+        var changedBox = event.target.name
+        var value = event.target.value
+        if (changedBox === "email"){setEmail(value)}
+        else if (changedBox === "password"){setPassword(value)}
+    }
+
+    async function handleSubmit(event)
+    {
+        event.preventDefault(event)
+           
+        try
+        {
+            var userDetailsResponse = await Axios.put("http://localhost:3001/submitUser", { email:email, password:password, accessKey:accessKey }, {withCredentials: true})
+            
+            await Swal.fire
+            ({
+                icon: 'success',
+                title: 'Changes successful',
+            })
+            setComplete(true)
+        }
+        catch (err)
+        { 
+            await Swal.fire
+            ({
+                icon: 'error',
+                title: 'Changes unsuccessful',
+                text: 'Please try again'
+            })
+            setComplete(false)
+        }
+
+    }
+
+    if (complete === true) {return ( <App /> )}
     return (
         <div className="AccessKey d-flex align-items-center vh-100 ">
             <Container className="w-25">
@@ -25,42 +98,42 @@ const AccessKey = () => {
                     </Col>
                 </Row>
                 
-                <Form className="mt-4">
+                <Form className="mt-4" onSubmit={handleSubmit}>
 
 
                     <Form.Row className="">
                         <Form.Group as={Col} className="">
                             <Form.Label>First Name</Form.Label>
-                            <Form.Control name="editFname" type="text" placeholder="User's first name" readOnly required />
+                            <Form.Control name="fname" type="text" placeholder={userDetails.fname} readOnly required />
                         </Form.Group>
 
                         <Form.Group as={Col} className="">
                             <Form.Label>Last Name</Form.Label>
-                            <Form.Control name="editLname" type="text" placeholder="User's last name" readOnly required />
+                            <Form.Control name="lname" type="text" placeholder={userDetails.lname} readOnly required />
                         </Form.Group>
                     </Form.Row>
 
 
                     <Form.Group  className="">
                         <Form.Label>ID</Form.Label>
-                        <Form.Control name="editID" type="text" placeholder="User's ID" readOnly />
+                        <Form.Control name="id" type="text" placeholder={padDigits(userDetails.id, 5)} readOnly />
                     </Form.Group>
 
                     <Form.Group className="">
                         <Form.Label>Account Type</Form.Label>
-                        <Form.Control name="editAccountType" type="text" placeholder="User's account type" readOnly required />
+                        <Form.Control name="accountType" type="text" placeholder={userDetails.accountType} readOnly required />
                     </Form.Group>
 
                     
-                        <Form.Group  className="">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control name="editEmail" type="email" placeholder="User's email"  required />
-                        </Form.Group>
+                    <Form.Group  className="">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control name="email" type="email" placeholder="Set an email" value={email} onChange={handleChange} required />
+                    </Form.Group>
 
-                        <Form.Group  className="">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control name="editPassword" type="password" required />
-                        </Form.Group>
+                    <Form.Group  className="">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control name="password" type="password" placeholder="Set a password" value={password} onChange={handleChange} required />
+                    </Form.Group>
                     
 
                     <ButtonGroup className="mt-2">
