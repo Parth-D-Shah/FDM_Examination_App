@@ -76,6 +76,28 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                                 </Col>
                             </Row>
                         )}
+
+                        {currentScreen === "takeExam" && (
+                            <Row className="align-items-center">
+                                <Col className="d-flex justify-content-center" xs="auto">
+                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Take Exam"/>
+                                </Col>
+                                <Col className="ml-3">
+                                    Take Exam
+                                </Col>
+                            </Row>
+                        )}
+
+                        {currentScreen === "createTicket" && (
+                            <Row className="align-items-center">
+                                <Col className="d-flex justify-content-center" xs="auto">
+                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Create Ticket"/>
+                                </Col>
+                                <Col className="ml-3">
+                                    Create Ticket
+                                </Col>
+                            </Row>
+                        )}
                     </div>
                 </Col>
 

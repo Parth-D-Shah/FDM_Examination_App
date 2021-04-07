@@ -18,6 +18,12 @@ import ManageUsers from '../Sysadmin/ManageUsers/ManageUsers'
 // Trainer screens
 import CreateExam from '../Trainer/CreateExam/CreateExam'
 
+// Trainee screens
+import TakeExam from '../Trainee/TakeExam/TakeExam'
+
+// general screens
+import CreateTicket from '../Trainee/CreateTicket/CreateTicket'
+
 
 import logo from '../../assets/logo-blue.png'
 
@@ -96,6 +102,8 @@ const Dashboard = () => {
                 {chosenScreen === "yourAccount" && (<YourAccount loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "manageUsers" && (<ManageUsers loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "createExam" && (<CreateExam loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "takeExam" && (<TakeExam loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "createTicket" && (<CreateTicket loggedInUser={loggedInUser}/>)}
             
             </Container>
 
