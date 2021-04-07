@@ -157,6 +157,28 @@ app.put("/addAccessKey", (req, res) =>
     })
 })
 
+app.put("/editUser", (req, res) =>
+{
+    const {id, email, fname, lname, accountType} = req.body
+    
+    db.run(`UPDATE user SET email='${email}', fname='${fname}', lname='${lname}', accountType='${accountType}' WHERE id=${id}`, (err) =>
+    {
+        if (err) {console.log(err.message); res.status(500).json({message: err.message})}
+        else {res.status(200).json({message: "user successfully edited"})}
+    })
+})
+
+app.post("/deleteUser", (req, res) =>
+{
+    const {id} = req.body
+    
+    db.run(`DELETE from user WHERE id=${id}`, (err) =>
+    {
+        if (err) {console.log(err.message); res.status(500).json({message: err.message})}
+        else {res.status(200).json({message: "user successfully deleted"})}
+    })
+})
+
 
 app.get('/getUsers', (req, res) =>
 {

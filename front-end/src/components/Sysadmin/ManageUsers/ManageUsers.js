@@ -24,7 +24,6 @@ const ManageUsers = ({loggedInUser}) => {
     const [editFname, setEditFname] = useState("")
     const [editLname, setEditLname] = useState("")
     const [editAccountType, setEditAccountType] = useState("")
-    const [editAccessKey, setEditAccessKey] = useState("")
 
 
     function padDigits(number, digits) {return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number}
@@ -64,7 +63,7 @@ const ManageUsers = ({loggedInUser}) => {
         
         fetchSystemUsers()
 
-    }, [accessKey]) // Updates when CREATE USER access key generated
+    }, [accessKey, editChosenAccountName]) // Updates when CREATE USER access key generated
 
 
     
@@ -102,7 +101,7 @@ const ManageUsers = ({loggedInUser}) => {
             await Swal.fire
             ({
                 icon: 'success',
-                title: 'Access Key: ' + accessKey,
+                title: 'Access Key: ' + createUserResponseData.message+"-"+key,
                 text: 'For: ' + fname + ' ' + lname
             })
 
@@ -114,7 +113,7 @@ const ManageUsers = ({loggedInUser}) => {
             ({
                 icon: 'error',
                 title: 'User creation unsuccessful',
-                text: err.response.message
+                text: err.response.data.message
             })
         }
 
@@ -158,11 +157,10 @@ const ManageUsers = ({loggedInUser}) => {
             var generateAKResponse = await Axios.put("http://localhost:3001/addAccessKey", { id:editChosenAccount.id, accessKey:key }, {withCredentials: true})
             generateAKResponseData = generateAKResponse.data  
             
-            setEditAccessKey(generateAKResponseData.message+"-"+key)
             await Swal.fire
             ({
                 icon: 'success',
-                title: 'Access Key: ' + editAccessKey,
+                title: 'Access Key: ' + generateAKResponseData.message+"-"+key,
                 text: 'For: ' + editFname + ' ' + editLname
             })
         }
@@ -172,10 +170,78 @@ const ManageUsers = ({loggedInUser}) => {
             ({
                 icon: 'error',
                 title: 'User creation unsuccessful',
-                text: err.response.message
+                text: err.response.data.message
             })
         }
 
+        setDisllowEditUser(true)
+        setEditChosenAccountName("")
+        setEditID("")
+        setEditEmail("")
+        setEditFname("")
+        setEditLname("")
+        setEditAccountType("")
+    }
+
+    
+    // Handle submit of editing user details
+    async function handleSubmitEditUser(event)
+    {
+        event.preventDefault(event);
+
+        try
+        {
+            await Axios.put("http://localhost:3001/editUser", { id:editChosenAccount.id, email:editEmail, fname:editFname, lname:editLname, accountType:editAccountType }, {withCredentials: true})
+            
+            await Swal.fire
+            ({
+                icon: 'success',
+                title: 'User successfully edited',
+            })
+        }
+        catch (err) 
+        { 
+            await Swal.fire
+            ({
+                icon: 'error',
+                title: 'User edit unsuccessful',
+                text: err.response.data.message
+            })
+        }
+        
+        setDisllowEditUser(true)
+        setEditChosenAccountName("")
+        setEditID("")
+        setEditEmail("")
+        setEditFname("")
+        setEditLname("")
+        setEditAccountType("")
+    }
+
+    // Handle submit of deleting user from db
+    async function handleSubmitDeleteUser()
+    {
+        try
+        {
+            await Axios.post("http://localhost:3001/deleteUser", { id:editChosenAccount.id }, {withCredentials: true})
+            
+            await Swal.fire
+            ({
+                icon: 'success',
+                title: 'User successfully deleted',
+            })
+        }
+        catch (err) 
+        { 
+            console.log(err.response)
+            await Swal.fire
+            ({
+                icon: 'error',
+                title: 'User delete unsuccessful',
+                text: err.response.data.message
+            })
+        }
+        
         setDisllowEditUser(true)
         setEditChosenAccountName("")
         setEditID("")
@@ -259,7 +325,8 @@ const ManageUsers = ({loggedInUser}) => {
                                 </Form.Control>
                                 
                                 <InputGroup.Append>
-                                    <Button type="submit" className="normalButton" variant="primary">Generate Access Key</Button>
+                                    <Button type="submit" className="normalButton" variant="primary" disabled={disallowEditUser}>Generate Access Key</Button>
+                                    <Button onClick={handleSubmitDeleteUser} className="" variant="danger" disabled={disallowEditUser}> Delete User </Button>
                                 </InputGroup.Append>
                             
                             </InputGroup>
@@ -283,7 +350,7 @@ const ManageUsers = ({loggedInUser}) => {
                     </Form>
 
 
-                    <Form>
+                    <Form onSubmit={handleSubmitEditUser}>
                         <Form.Row className="">
                             <Form.Group as={Col} className="">
                                 <Form.Label>ID</Form.Label>
@@ -318,11 +385,11 @@ const ManageUsers = ({loggedInUser}) => {
                             </Form.Control>
                         </Form.Group>
 
-                        <Form.Row className="mt-4">
-                            <FormGroup as={Col} className="" xs="auto">
-                                <Button type="submit" className="normalButton" variant="primary">Confirm Edits</Button>
-                            </FormGroup>
-                        </Form.Row>
+                        <ButtonGroup className="mt-2">
+                            <Button type="submit" className="normalButton" variant="primary" disabled={disallowEditUser}> Confirm Edits </Button>
+
+                            {/* <Button className="ml-3" variant="danger" disabled={disallowEditUser}> Delete User </Button> */}
+                        </ButtonGroup>
 
                     </Form>
                 
