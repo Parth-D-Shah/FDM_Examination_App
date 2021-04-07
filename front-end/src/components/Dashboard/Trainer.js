@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import {Button, Card, CardDeck} from 'react-bootstrap'; // Container for all Rows/Components
 
 import iconYourAccount from '../../assets/your-account-blue.png';
-import iconManageUsers from '../../assets/manage-users-blue.png';
+import iconCreateExam from '../../assets/create-exam-blue.png';
 import iconTicket from '../../assets/ticket-blue.png';
 
 const Sysadmin = ({changeScreen}) => {
@@ -20,7 +20,7 @@ const Sysadmin = ({changeScreen}) => {
                             View information about your account and change details.
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="yourAccount normalButton" variant="primary" onClick={handleChangeScreen}> Your Account </Button>
+                            <Button className="YourAccount normalButton" variant="primary" onClick={handleChangeScreen}> Your Account </Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -29,14 +29,14 @@ const Sysadmin = ({changeScreen}) => {
 
 
                 <Card bg="dark" text="white" className="card text-center mr-5">
-                    <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconManageUsers}/>
+                    <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconCreateExam}/>
                     <Card.Body>
                         <Card.Title> Create Exam </Card.Title>
                         <Card.Text>
-                            Create an exam for trainees to undertake.
+                            Create and publish an exam for trainees to take.
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="createExam normalButton" variant="primary" onClick={handleChangeScreen}> Create Exam </Button>
+                            <Button className="CreateExam normalButton" variant="primary" onClick={handleChangeScreen}> Create Exam </Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -48,11 +48,11 @@ const Sysadmin = ({changeScreen}) => {
                     <Card.Body>
                         <Card.Title> Get Support </Card.Title>
                         <Card.Text>
-                            Create a support ticket.
+                            Create a support ticket if you need help.
                             <br /><br />
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="createTicket normalButton" variant="primary" onClick={handleChangeScreen}> Get Support </Button>
+                            <Button className="GetSupport normalButton" variant="primary" onClick={handleChangeScreen}> Get Support </Button>
                         </div>
                     </Card.Body>
                 </Card>

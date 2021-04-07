@@ -6,12 +6,18 @@ import iconID from '../../assets/id-blue.png';
 import iconUser from '../../assets/user-blue.png';
 import iconEmail from '../../assets/email-blue.png';
 
+// Universal icons
 import iconDashboard from '../../assets/dashboard-blue.png';
-
-// Sysadmin features
 import iconYourAccount from '../../assets/your-account-blue.png';
-import iconManageUsers from '../../assets/manage-users-blue.png';
 import iconTicket from '../../assets/ticket-blue.png';
+
+// System admin icons
+import iconManageUsers from '../../assets/manage-users-blue.png';
+
+//Trainer icons
+import iconCreateExam from '../../assets/create-exam-blue.png';
+
+
 
 
 
@@ -22,7 +28,7 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                 <Col className="" xs="auto">
                     <div className="welcomeMsg float-left">
                         
-                        {currentScreen === "dashboard" && (
+                        {currentScreen === "Dashboard" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
                                     <img className="screenMessageImage img-fluid" src={iconDashboard} alt="Dashboard"/>
@@ -33,7 +39,7 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}
 
-                        {currentScreen === "yourAccount" && (
+                        {currentScreen === "YourAccount" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
                                     <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Your Account"/>
@@ -44,7 +50,7 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}
 
-                        {currentScreen === "manageUsers" && (
+                        {currentScreen === "ManageUsers" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
                                     <img className="screenMessageImage img-fluid" src={iconManageUsers} alt="Manage Users"/>
@@ -55,7 +61,7 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}
 
-                        {currentScreen === "manageTickets" && (
+                        {currentScreen === "ManageTickets" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
                                     <img className="screenMessageImage img-fluid" src={iconTicket} alt="Manage Tickets"/>
@@ -66,10 +72,10 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}     
 
-                        {currentScreen === "createExam" && (
+                        {currentScreen === "CreateExam" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
-                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Create Exam"/>
+                                    <img className="screenMessageImage img-fluid" src={iconCreateExam} alt="Create Exam"/>
                                 </Col>
                                 <Col className="ml-3">
                                     Create Exam
