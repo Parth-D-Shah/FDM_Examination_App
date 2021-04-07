@@ -5,8 +5,11 @@ import {Container, Navbar, Nav, Button, Row, Col} from 'react-bootstrap'; // Con
 import ScreenMessage from '../ScreenMessage/ScreenMessage'
 import Sysadmin from './Sysadmin'
 import Trainer from './Trainer'
+import Trainee from './Trainee'
 import YourAccount from '../Sysadmin/YourAccount/YourAccount'
 import ManageUsers from '../Sysadmin/ManageUsers/ManageUsers'
+import CreateExam from '../Trainer/CreateExam/CreateExam'
+
 
 import logo from '../../assets/logo-blue.png'
 
@@ -82,8 +85,10 @@ const Dashboard = () => {
                 <ScreenMessage loggedInUser={loggedInUser} currentScreen={chosenScreen}/>
                 {loggedInUser.accountType === "System Admin" && chosenScreen === "dashboard" && (<Sysadmin changeScreen={changeScreen} />)}
                 {loggedInUser.accountType === "Trainer" && chosenScreen === "dashboard" && (<Trainer changeScreen={changeScreen} />)}
+                {loggedInUser.accountType === "Trainee" && chosenScreen === "dashboard" && (<Trainee changeScreen={changeScreen} />)}
                 {chosenScreen === "yourAccount" && (<YourAccount loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "manageUsers" && (<ManageUsers loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "createExam" && (<CreateExam loggedInUser={loggedInUser}/>)}
             
             </Container>
 

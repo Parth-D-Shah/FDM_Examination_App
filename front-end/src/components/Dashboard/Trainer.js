@@ -31,12 +31,12 @@ const Sysadmin = ({changeScreen}) => {
                 <Card bg="dark" text="white" className="card text-center mr-5">
                     <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconManageUsers}/>
                     <Card.Body>
-                        <Card.Title> Manage System Users </Card.Title>
+                        <Card.Title> Create Exam </Card.Title>
                         <Card.Text>
-                            Create and manage user accounts for the system.
+                            Create an exam for trainees to undertake.
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="manageUsers normalButton" variant="primary" onClick={handleChangeScreen}> Manage Users </Button>
+                            <Button className="createExam normalButton" variant="primary" onClick={handleChangeScreen}> Create Exam </Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -46,16 +46,16 @@ const Sysadmin = ({changeScreen}) => {
                 <Card bg="dark" text="white" className="card text-center">
                     <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconTicket}/>
                     <Card.Body>
-                        <Card.Title> Manage Support Tickets </Card.Title>
+                        <Card.Title> Get Support </Card.Title>
                         <Card.Text>
-                            View and resolve support tickets submitted by users.
+                            Create a support ticket.
+                            <br /><br />
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="manageTickets normalButton" variant="primary" onClick={handleChangeScreen}> Manage Tickets </Button>
+                            <Button className="createTicket normalButton" variant="primary" onClick={handleChangeScreen}> Get Support </Button>
                         </div>
                     </Card.Body>
                 </Card>
-
             </CardDeck>
         </div>
     )
