@@ -1,32 +1,36 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import './Login.css';
 import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap' // Container for all Rows/Components
-import {useState} from 'react'; // React states to store API info
+
+import AccessKey from '../AccessKey/AccessKey'
 import logo from '../../assets/logo-blue.png'
+
+import {useState} from 'react'; // React states to store API info
+
 import Swal from 'sweetalert2'
 import Axios from 'axios' // for handling API Call
+
+
+
 
 const Login = ({updateLoggedIn}) => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loginFailed, setLoginFailed] = useState(false)
+    const [useAccessKey, setUseAccessKey] = useState(false)
 
     async function handleSubmit(event)
     {
         event.preventDefault(event);
-
-        var loginResponseStatus = null
         
         try
         {
-            var loginResponse = await Axios.post("http://localhost:3001/login", { email: email, password: password }, {withCredentials: true })
-            loginResponseStatus = loginResponse.status    
+            await Axios.post("http://localhost:3001/login", { email: email, password: password }, {withCredentials: true })
+            updateLoggedIn(true)   
         }
-        catch (err) { if (err.response.status === 401) {loginResponseStatus = err.response.status} }
+        catch (err) {console.log(err.response.data.message); setLoginFailed(true)}
 
-        if (loginResponseStatus === 200) { updateLoggedIn(true) }
-        else { setLoginFailed(true) }
     }
 
     function handleChange(event)
@@ -34,41 +38,32 @@ const Login = ({updateLoggedIn}) => {
         var changedBox = event.target.name
         var value = event.target.value
 
-        if (changedBox === "email")
-        {
-            setEmail(value)
-        }
+        if (changedBox === "email") {setEmail(value)}
 
-        else if (changedBox === "pwd")
-        {
-            setPassword(value)
-        }
+        else if (changedBox === "pwd") {setPassword(value)}
     }
 
-    async function handleAccessCode()
+    async function handleAccessKey()
     {
-        const {value: userAccessCode} = await Swal.fire
+        const {value: userAccessKey} = await Swal.fire
         ({
-            title: 'Access Code',
+            title: 'Access Key',
             input: 'text',
             confirmButtonText: 'Submit',
             showCancelButton: true,
-            inputValidator: (code) => 
+            inputValidator: async (key) => 
             {
-              if (code !== "test") 
-              {
-                return 'Please enter a valid access code'
-              }
+                try {await Axios.post("http://localhost:3001/checkAccessKey", { accessKey:key }, {withCredentials: true})}
+                catch (err) { return 'Please enter a valid access key' }
             }
         })
 
-        if (userAccessCode)
-        {
-            console.log("accepted")
-        } 
+        if (userAccessKey) {setUseAccessKey(true)} 
     }
     
 
+    if (useAccessKey) {return (<AccessKey />)}
+    
     return (
         <div id="positioning">
 
@@ -78,7 +73,7 @@ const Login = ({updateLoggedIn}) => {
                     <Col className="d-flex justify-content-center" xs="auto">
                         <img className="loginLogo img-fluid" src={logo} alt="Logo"/>
                     </Col>
-                    <Col className="d-flex justify-content-center">
+                    <Col className="d-flex justify-content-center" xs="auto">
                         <h1 id="heading">Online Examination Application</h1>
                     </Col>
                 </Row>
@@ -101,7 +96,7 @@ const Login = ({updateLoggedIn}) => {
                         Login
                     </Button>
 
-                    <Button className="btnAccessCode ml-5" variant="outline-primary" onClick={handleAccessCode}>
+                    <Button className="btnAccessCode ml-5" variant="outline-primary" onClick={handleAccessKey}>
                         Have an access key?
                     </Button>
                 </ButtonGroup>

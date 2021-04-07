@@ -103,13 +103,11 @@ app.post("/createUser", (req, res) =>
     })
 })
 
-app.put("/submitUser", (req, res) =>
+app.post("/checkAccessKey", (req, res) =>
 {
-    const {email, password, accessKey} = req.body
+    const {accessKey} = req.body
     const id = parseInt(accessKey.substring(0, accessKey.indexOf('-')))
     const accessKeyInDB = accessKey.substring(accessKey.indexOf('-')+1)
-    //console.log(id)
-    //console.log(accessKeyInDB)
 
     db.all(`SELECT * FROM user where id=${id}`, (err, row) =>
     {
@@ -123,10 +121,35 @@ app.put("/submitUser", (req, res) =>
 
             bcrypt.compare(accessKeyInDB, dbAccessKey).then( (match) =>
             {
-                if (!match)
-                {
-                    res.status(401).json({message: "invalid access key"})
-                }
+                if (!match) {res.status(401).json({message: "invalid access key"})}
+                
+                else {res.status(200).json({message: "valid access key"})}
+            })
+        }
+    });
+})
+
+
+app.put("/submitUser", (req, res) =>
+{
+    const {email, password, accessKey} = req.body
+    const id = parseInt(accessKey.substring(0, accessKey.indexOf('-')))
+    const accessKeyInDB = accessKey.substring(accessKey.indexOf('-')+1)
+
+    db.all(`SELECT * FROM user where id=${id}`, (err, row) =>
+    {
+        if (err){console.log(err.message); res.status(500).json({message: err.message})}
+        
+        else if (row.length === 0) {res.status(401).json({message: "invalid access key"})}
+
+        else
+        {
+            const dbAccessKey = row[0].accessKey
+
+            bcrypt.compare(accessKeyInDB, dbAccessKey).then( (match) =>
+            {
+                if (!match) {res.status(401).json({message: "invalid access key"})}
+                
                 else
                 {
                     bcrypt.hash(password, 10).then ( (hash) => 
@@ -142,6 +165,7 @@ app.put("/submitUser", (req, res) =>
         }
     });
 })
+
 
 app.put("/addAccessKey", (req, res) =>
 {
