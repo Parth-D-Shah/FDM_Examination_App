@@ -4,6 +4,7 @@ import {Container, Navbar, Nav, Button, Row, Col} from 'react-bootstrap'; // Con
 
 import ScreenMessage from '../ScreenMessage/ScreenMessage'
 import Sysadmin from './Sysadmin'
+import Trainer from './Trainer'
 import YourAccount from '../Sysadmin/YourAccount/YourAccount'
 import ManageUsers from '../Sysadmin/ManageUsers/ManageUsers'
 
@@ -80,6 +81,7 @@ const Dashboard = () => {
 
                 <ScreenMessage loggedInUser={loggedInUser} currentScreen={chosenScreen}/>
                 {loggedInUser.accountType === "System Admin" && chosenScreen === "dashboard" && (<Sysadmin changeScreen={changeScreen} />)}
+                {loggedInUser.accountType === "Trainer" && chosenScreen === "dashboard" && (<Trainer changeScreen={changeScreen} />)}
                 {chosenScreen === "yourAccount" && (<YourAccount loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "manageUsers" && (<ManageUsers loggedInUser={loggedInUser}/>)}
             
