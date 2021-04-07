@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap'; // Container for all Rows/Components
 
 import Swal from 'sweetalert2'
-import './CreateTicket.css'
+import './GetSupport.css'
 
 const Dashboard = ({loggedInUser}) => {
     async function handleTicketSubmit(event)
@@ -31,7 +31,7 @@ const Dashboard = ({loggedInUser}) => {
                 <Form.Row>
                     <Form.Group as={Col}>
                         <Form.Label>Answer: </Form.Label>
-                        <Form.Control name="editFname" type="text" placeholder="Enter Answer"/>
+                        <Form.Control name="editFname" type="text" placeholder="Enter Answer" required/>
                     </Form.Group>
 
                 </Form.Row>

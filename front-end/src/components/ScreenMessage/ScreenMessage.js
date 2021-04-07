@@ -83,7 +83,7 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}
 
-                        {currentScreen === "takeExam" && (
+                        {currentScreen === "TakeExam" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
                                     <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Take Exam"/>
@@ -94,13 +94,13 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}
 
-                        {currentScreen === "createTicket" && (
+                        {currentScreen === "GetSupport" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
-                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Create Ticket"/>
+                                    <img className="screenMessageImage img-fluid" src={iconTicket} alt="Get Support"/>
                                 </Col>
                                 <Col className="ml-3">
-                                    Create Ticket
+                                    Get Support
                                 </Col>
                             </Row>
                         )}

@@ -22,7 +22,7 @@ import CreateExam from '../Trainer/CreateExam/CreateExam'
 import TakeExam from '../Trainee/TakeExam/TakeExam'
 
 // general screens
-import CreateTicket from '../Trainee/CreateTicket/CreateTicket'
+import GetSupport from '../GetSupport/GetSupport'
 
 
 import logo from '../../assets/logo-blue.png'
@@ -116,7 +116,9 @@ const Dashboard = () => {
                 {chosenScreen === "ManageUsers" && (<ManageUsers loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "CreateExam" && (<CreateExam loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "TakeExam" && (<TakeExam loggedInUser={loggedInUser}/>)}
-                {chosenScreen === "CreateTicket" && (<CreateTicket loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "GetSupport" && (<GetSupport loggedInUser={loggedInUser}/>)}
+
+                
             
             </Container>
 
