@@ -35,11 +35,12 @@ import Axios from 'axios' // for handling API Call
 const Dashboard = () => {
 
     const [loggedInUser, setLoggedInUser] = useState(null)
-    const [chosenScreen, setChosenScreen] = useState("dashboard")
+    const [chosenScreen, setChosenScreen] = useState("Dashboard")
+    const [userFunctionality, setUserFunctionality] = useState(null)
 
     function padDigits(number, digits) {return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number}
 
-    const changeScreen = (e) => {setChosenScreen(e.target.classList[0])}
+    const changeScreen = (e) => {setChosenScreen(e.target.classList[0])} 
 
     // Effect Hook
     useEffect( () =>
@@ -55,13 +56,21 @@ const Dashboard = () => {
             catch (err) { loggedInResponseData = err }
 
             setLoggedInUser(loggedInResponseData)
+
+            var loggedInUserAccountType = loggedInResponseData.accountType 
+
+            if (loggedInUserAccountType === "System Admin") {setUserFunctionality(["Dashboard", "Your Account", "Manage Users", "Manage Tickets"])}
+            else if (loggedInUserAccountType === "Trainer") {setUserFunctionality(["Dashboard", "Your Account", "Create Exam", "Get Support"])}
+            else if (loggedInUserAccountType === "Trainee") {setUserFunctionality(["Dashboard", "Your Account", "Take Exam", "Get Support"])}
         }
         
         fetchLoggedInUser()
 
     }, [])
     
-    if (loggedInUser === null) { return(<div> LOADING </div>) }
+    if (loggedInUser === null || userFunctionality === null) { return(<div> LOADING </div>) }
+
+
     
     return (
         <div>
@@ -81,12 +90,15 @@ const Dashboard = () => {
                     
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="links ml-auto ">
-                            <Nav.Link className="dashboard mr-3" href="" onClick={changeScreen}>Dashboard</Nav.Link>
-                            <Nav.Link className="yourAccount mr-3" href="" onClick={changeScreen}>Your Account</Nav.Link>
-                            <Nav.Link className="manageUsers mr-3" href="" onClick={changeScreen}>Manage Users</Nav.Link>
-                            <Nav.Link className="manageTickets mr-4" href="" onClick={changeScreen}>Manage Tickets</Nav.Link>
+                            {userFunctionality.map((functionality) =>
+                            {
+                                var navActive = ""
+                                if (chosenScreen === functionality.replace(/\s/g, '')) {navActive = "active"}
+                                return (<Nav.Link className={functionality.replace(/\s/g, '') + " " + navActive +" mr-3"} href="" onClick={changeScreen}>{functionality}</Nav.Link>)
+                            })}
+
                         </Nav>
-                        <Button className="outlineButton" variant="outline-primary">Sign Out</Button>
+                        <Button className="outlineButton ml-2" variant="outline-primary">Sign Out</Button>
                     </Navbar.Collapse>
                 
                 </Container>
@@ -96,14 +108,15 @@ const Dashboard = () => {
             <Container>
 
                 <ScreenMessage loggedInUser={loggedInUser} currentScreen={chosenScreen}/>
-                {loggedInUser.accountType === "System Admin" && chosenScreen === "dashboard" && (<Sysadmin changeScreen={changeScreen} />)}
-                {loggedInUser.accountType === "Trainer" && chosenScreen === "dashboard" && (<Trainer changeScreen={changeScreen} />)}
-                {loggedInUser.accountType === "Trainee" && chosenScreen === "dashboard" && (<Trainee changeScreen={changeScreen} />)}
-                {chosenScreen === "yourAccount" && (<YourAccount loggedInUser={loggedInUser}/>)}
-                {chosenScreen === "manageUsers" && (<ManageUsers loggedInUser={loggedInUser}/>)}
-                {chosenScreen === "createExam" && (<CreateExam loggedInUser={loggedInUser}/>)}
-                {chosenScreen === "takeExam" && (<TakeExam loggedInUser={loggedInUser}/>)}
-                {chosenScreen === "createTicket" && (<CreateTicket loggedInUser={loggedInUser}/>)}
+                {loggedInUser.accountType === "System Admin" && chosenScreen === "Dashboard" && (<Sysadmin changeScreen={changeScreen} />)}
+                {loggedInUser.accountType === "Trainer" && chosenScreen === "Dashboard" && (<Trainer changeScreen={changeScreen} />)}
+                {loggedInUser.accountType === "Trainee" && chosenScreen === "Dashboard" && (<Trainee changeScreen={changeScreen} />)}
+                
+                {chosenScreen === "YourAccount" && (<YourAccount loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "ManageUsers" && (<ManageUsers loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "CreateExam" && (<CreateExam loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "TakeExam" && (<TakeExam loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "CreateTicket" && (<CreateTicket loggedInUser={loggedInUser}/>)}
             
             </Container>
 

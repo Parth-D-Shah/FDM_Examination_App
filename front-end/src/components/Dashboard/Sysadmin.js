@@ -20,7 +20,7 @@ const Sysadmin = ({changeScreen}) => {
                             View information about your account and change details.
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="yourAccount normalButton" variant="primary" onClick={handleChangeScreen}> Your Account </Button>
+                            <Button className="YourAccount normalButton" variant="primary" onClick={handleChangeScreen}> Your Account </Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -33,7 +33,7 @@ const Sysadmin = ({changeScreen}) => {
                             Create and manage user accounts for the system.
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="manageUsers normalButton" variant="primary" onClick={handleChangeScreen}> Manage Users </Button>
+                            <Button className="ManageUsers normalButton" variant="primary" onClick={handleChangeScreen}> Manage Users </Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -46,7 +46,7 @@ const Sysadmin = ({changeScreen}) => {
                             View and resolve support tickets submitted by users.
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="manageTickets normalButton" variant="primary" onClick={handleChangeScreen}> Manage Tickets </Button>
+                            <Button className="ManageTickets normalButton" variant="primary" onClick={handleChangeScreen}> Manage Tickets </Button>
                         </div>
                     </Card.Body>
                 </Card>

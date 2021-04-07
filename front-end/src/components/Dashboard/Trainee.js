@@ -20,7 +20,7 @@ const Sysadmin = ({changeScreen}) => {
                             View information about your account and change details.
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="yourAccount normalButton" variant="primary" onClick={handleChangeScreen}> Your Account </Button>
+                            <Button className="YourAccount normalButton" variant="primary" onClick={handleChangeScreen}> Your Account </Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -37,7 +37,7 @@ const Sysadmin = ({changeScreen}) => {
                             <br /><br />
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="takeExam normalButton" variant="primary" onClick={handleChangeScreen}> Take Exam </Button>
+                            <Button className="TakeExam normalButton" variant="primary" onClick={handleChangeScreen}> Take Exam </Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -49,11 +49,11 @@ const Sysadmin = ({changeScreen}) => {
                     <Card.Body>
                         <Card.Title> Get Support </Card.Title>
                         <Card.Text>
-                            Create a support ticket.
+                            Create a support ticket if you need help.
                             <br /><br />
                         </Card.Text>
                         <div className="d-flex justify-content-center">
-                            <Button className="createTicket normalButton" variant="primary" onClick={handleChangeScreen}> Get Support </Button>
+                            <Button className="GetSupport normalButton" variant="primary" onClick={handleChangeScreen}> Get Support </Button>
                         </div>
                     </Card.Body>
                 </Card>
