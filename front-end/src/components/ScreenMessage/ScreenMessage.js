@@ -42,6 +42,17 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}
 
+                        {currentScreen === "createExam" && (
+                            <Row className="align-items-center">
+                                <Col className="d-flex justify-content-center" xs="auto">
+                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Create Exam"/>
+                                </Col>
+                                <Col className="ml-3">
+                                    Create Exam
+                                </Col>
+                            </Row>
+                        )}
+
                         {currentScreen === "manageUsers" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
