@@ -235,6 +235,13 @@ app.get('/getUsers', (req, res) =>
         else { res.status(200).json(row) }
     })
 })
+
+
+
+
+
+
+
 app.post("/createAnswer", (req, res) =>
 {
     const {questionid, answerText} = req.body
@@ -256,9 +263,42 @@ app.post("/createAnswer", (req, res) =>
     
 })
 
+
 app.get('/getAnswers', (req, res) =>
 {
     db.all(`SELECT id, questionid, answerText FROM answers`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else { res.status(200).json(row) }
+    })
+})
+
+
+app.post("/createQuestion", (req, res) =>
+{
+    const {examid, questionText} = req.body
+    {
+        db.run(`INSERT into question(id, examid, questionText) VALUES ('${examid}', '${questionText}')`, (err) =>
+        {
+            if (err){console.log(err.message); res.status(500).json({message: err.message})}
+            else
+            {
+                db.all(`select last_insert_rowid()`, (err, row) =>
+                {
+                    if (err){console.log(err.message); res.status(500).json({message: err.message})}
+
+                    else {res.status(200).json({message: row[0]["last_insert_rowid()"]})}
+                })
+            }
+        })
+    }
+})
+
+
+app.get('/getQuestion', (req, res) =>
+{
+    db.all(`SELECT id, examid, questionText, FROM question`, (err, row) =>
     {
         if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
 
