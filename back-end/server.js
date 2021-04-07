@@ -235,3 +235,33 @@ app.get('/getUsers', (req, res) =>
         else { res.status(200).json(row) }
     })
 })
+app.post("/createAnswer", (req, res) =>
+{
+    const {questionid, answerText} = req.body
+    
+    
+        db.run(`INSERT INTO answers (questionid, answerText) VALUES ('${questionid}', '${answerText}')`, (err) =>
+        {
+            if (err){console.log(err.message); res.status(500).json({message: err.message})}
+            else
+            {
+                db.all(`select last_insert_rowid()`, (err, row) =>
+                {
+                    if (err){console.log(err.message); res.status(500).json({message: err.message})}
+            
+                    else {res.status(200).json({message: row[0]["last_insert_rowid()"]})}
+                })
+            }
+        })
+    
+})
+
+app.get('/getAnswers', (req, res) =>
+{
+    db.all(`SELECT id, questionid, answerText FROM answers`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else { res.status(200).json(row) }
+    })
+})
