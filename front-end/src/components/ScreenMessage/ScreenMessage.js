@@ -13,6 +13,8 @@ import iconYourAccount from '../../assets/your-account-blue.png';
 import iconManageUsers from '../../assets/manage-users-blue.png';
 import iconTicket from '../../assets/ticket-blue.png';
 
+
+
 const ScreenMessage = ({loggedInUser, currentScreen}) => {
     return (
         <div>
@@ -42,17 +44,6 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                             </Row>
                         )}
 
-                        {currentScreen === "createExam" && (
-                            <Row className="align-items-center">
-                                <Col className="d-flex justify-content-center" xs="auto">
-                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Create Exam"/>
-                                </Col>
-                                <Col className="ml-3">
-                                    Create Exam
-                                </Col>
-                            </Row>
-                        )}
-
                         {currentScreen === "manageUsers" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
@@ -73,7 +64,18 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                                     Manage Support Tickets
                                 </Col>
                             </Row>
-                        )}         
+                        )}     
+
+                        {currentScreen === "createExam" && (
+                            <Row className="align-items-center">
+                                <Col className="d-flex justify-content-center" xs="auto">
+                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Create Exam"/>
+                                </Col>
+                                <Col className="ml-3">
+                                    Create Exam
+                                </Col>
+                            </Row>
+                        )}
                     </div>
                 </Col>
 

@@ -3,16 +3,23 @@ import './Dashboard.css';
 import {Container, Navbar, Nav, Button, Row, Col} from 'react-bootstrap'; // Container for all Rows/Components
 
 import ScreenMessage from '../ScreenMessage/ScreenMessage'
+
+// Card decks for the three users
 import Sysadmin from './Sysadmin'
 import Trainer from './Trainer'
 import Trainee from './Trainee'
-import YourAccount from '../Sysadmin/YourAccount/YourAccount'
+
+// Universal screen
+import YourAccount from '../YourAccount/YourAccount'
+
+// System Admin screens
 import ManageUsers from '../Sysadmin/ManageUsers/ManageUsers'
+
+// Trainer screens
 import CreateExam from '../Trainer/CreateExam/CreateExam'
 
 
 import logo from '../../assets/logo-blue.png'
-
 
 import {useState, useEffect} from 'react'; // React states to store API info
 import Axios from 'axios' // for handling API Call
