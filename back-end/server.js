@@ -264,7 +264,7 @@ app.post("/createAnswer", (req, res) =>
 })
 
 
-app.get('/getAnswers', (req, res) =>
+app.get('/getAnswer', (req, res) =>
 {
     db.all(`SELECT id, questionid, answerText FROM answers`, (err, row) =>
     {
@@ -299,6 +299,17 @@ app.post("/createQuestion", (req, res) =>
 app.get('/getQuestion', (req, res) =>
 {
     db.all(`SELECT id, examid, questionText, FROM question`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else { res.status(200).json(row) }
+    })
+})
+
+app.get('/getUserExams', (req, res) =>
+{
+    const {userid} = req.body
+    db.all(`SELECT userid, examid FROM examTakers where userid= ${userid}`, (err, row) =>
     {
         if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
 
