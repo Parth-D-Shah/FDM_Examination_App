@@ -287,23 +287,6 @@ const ManageUsers = ({loggedInUser}) => {
                             <Button type="submit" className="normalButton" variant="primary">Create User</Button>
                         </FormGroup>
 
-
-                        
-                        {/* <Form.Row className="">
-                            <FormGroup as={Col} className="" xs="auto">
-                                {createUserSuccessful === true && (
-                                    <p className="createUserSuccessfulMessage"> User successfully created, copy access key : </p>
-                                )}
-
-                                {createUserSuccessful === false && (
-                                    <p className="createUserUnsuccessfulMessage"> User creation unsuccessful, please try again </p>
-                                )}
-                            </FormGroup>
-
-                            <FormGroup as={Col} className="" >
-                                <p style={{color: accessKeyColour}} className="accessKey" plaintext readOnly>{accessKey}</p>
-                            </FormGroup>
-                        </Form.Row> */}
                     </Form>
                 </Col>
 
@@ -331,22 +314,6 @@ const ManageUsers = ({loggedInUser}) => {
                             
                             </InputGroup>
                         </Form.Group>
-
-                        {/* <Form.Row className="">
-                            <FormGroup as={Col} className="" xs="auto">
-                                {editUserAccessKeySuccessful === true && (
-                                    <p className="createUserSuccessfulMessage"> Access key successfully created, copy access key : </p>
-                                )}
-
-                                {editUserAccessKeySuccessful === false && (
-                                    <p className="createUserUnsuccessfulMessage text-center"> User edit access key creation unsuccessful, please try again </p>
-                                )}
-                            </FormGroup>
-
-                            <FormGroup as={Col} className="">
-                                    <p style={{color: editAccessKeyColour}} className="accessKey" plaintext readOnly> {editAccessKey} </p>
-                            </FormGroup>
-                        </Form.Row> */}
                     </Form>
 
 
@@ -387,8 +354,6 @@ const ManageUsers = ({loggedInUser}) => {
 
                         <ButtonGroup className="mt-2">
                             <Button type="submit" className="normalButton" variant="primary" disabled={disallowEditUser}> Confirm Edits </Button>
-
-                            {/* <Button className="ml-3" variant="danger" disabled={disallowEditUser}> Delete User </Button> */}
                         </ButtonGroup>
 
                     </Form>
