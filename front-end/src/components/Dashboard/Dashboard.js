@@ -51,14 +51,14 @@ const Dashboard = () => {
             try
             {
                 var loggedInResponse = await Axios.get("http://localhost:3001/loggedIn", {withCredentials: true })
-                loggedInResponseData = {id:padDigits(loggedInResponse.data.id, 5), email:loggedInResponse.data.email, fname:loggedInResponse.data.fname, lname:loggedInResponse.data.lname, accountType:loggedInResponse.data.accountType}
+                loggedInResponseData = {id:padDigits(loggedInResponse.data.message.id, 5), email:loggedInResponse.data.message.email, fname:loggedInResponse.data.message.fname, lname:loggedInResponse.data.message.lname, accountType:loggedInResponse.data.message.accountType}
+                
             }
-            catch (err) { loggedInResponseData = err }
-
+            catch (err) { console.log(err.response) }
+            
             setLoggedInUser(loggedInResponseData)
-
+            
             var loggedInUserAccountType = loggedInResponseData.accountType 
-
             if (loggedInUserAccountType === "System Admin") {setUserFunctionality(["Dashboard", "Your Account", "Manage Users", "Manage Tickets"])}
             else if (loggedInUserAccountType === "Trainer") {setUserFunctionality(["Dashboard", "Your Account", "Create Exam", "Get Support"])}
             else if (loggedInUserAccountType === "Trainee") {setUserFunctionality(["Dashboard", "Your Account", "Take Exam", "Get Support"])}
@@ -66,7 +66,7 @@ const Dashboard = () => {
         
         fetchLoggedInUser()
 
-    }, [])
+    }, [chosenScreen])
     
     if (loggedInUser === null || userFunctionality === null) { return(<div> LOADING </div>) }
 

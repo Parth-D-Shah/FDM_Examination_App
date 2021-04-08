@@ -33,7 +33,7 @@ const Sysadmin = ({changeScreen}) => {
                     <Card.Body>
                         <Card.Title> Take Exam </Card.Title>
                         <Card.Text>
-                            Take the exam set by your Trainer.
+                            Take exams set by your Trainer.
                             <br /><br />
                         </Card.Text>
                         <div className="d-flex justify-content-center">

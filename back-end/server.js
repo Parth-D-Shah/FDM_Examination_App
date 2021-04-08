@@ -48,7 +48,7 @@ app.post('/login', (req, res) =>
                 else
                 {
                     const user = row[0]
-                    const accessToken = sign( {id:user.id, email:user.email, fname:user.fname, lname:user.lname, accountType:user.accountType}, "secret" )
+                    const accessToken = sign( {id:user.id}, "secret" )
                     res.cookie("access-token", accessToken, { maxAge: 86400000, /*httpOnly: true, secure: true*/ })
                     res.status(200).json({message: "login successful"})
                 }
@@ -75,7 +75,15 @@ app.get("/loggedIn", (req, res) =>
             if (tokenValid)
             {
                 const decodedToken = decode(accessToken, {complete: true})
-                res.status(200).json(decodedToken.payload)
+                
+                db.all(`SELECT id, fname, lname, email, accountType FROM user where id=${decodedToken.payload.id}`, (err, row) =>
+                {
+                    if (err){console.log(err.message); res.status(500).json({message: err.message})}
+                    
+                    else if (row.length === 0) {res.status(401).json({message: "invalid id"})}
+            
+                    else {res.status(200).json({message: row[0]})}
+                });
             }
         }
         catch (err) { res.status(401).json( {message: "not logged in"} ) }
@@ -186,6 +194,20 @@ app.put("/submitUser", (req, res) =>
             })
         }
     });
+})
+
+app.put("/editUserDetails", (req, res) =>
+{
+    const {id, email, password} = req.body
+    
+    bcrypt.hash(password, 10).then ( (hash) => 
+    {
+        db.run(`UPDATE user SET email='${email}', password='${hash}' WHERE id=${id}`, (err) =>
+        {
+            if (err){console.log(err.message); res.status(500).json({message: err.message})}
+            else {res.status(200).json({message: "user details successfully changed"})}
+        })
+    })
 })
 
 

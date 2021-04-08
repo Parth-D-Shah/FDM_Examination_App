@@ -8,6 +8,7 @@ import Axios from 'axios' // for handling API Call
 import Swal from 'sweetalert2'
 
 import App from '../../App.js'
+import logo from '../../assets/logo-blue.png'
 
 const AccessKey = ({accessKey}) => {
 
@@ -31,7 +32,6 @@ const AccessKey = ({accessKey}) => {
                 var userDetailsResponse = await Axios.post("http://localhost:3001/getUserDetails", { id:id }, {withCredentials: true})
                 setUserDetails(userDetailsResponse.data.message)
                 setEmail(userDetailsResponse.data.message.email)
-                console.log(userDetailsResponse.data.message)
             }
             catch (err) { console.log(err) }
         }
@@ -55,7 +55,7 @@ const AccessKey = ({accessKey}) => {
            
         try
         {
-            var userDetailsResponse = await Axios.put("http://localhost:3001/submitUser", { email:email, password:password, accessKey:accessKey }, {withCredentials: true})
+            await Axios.put("http://localhost:3001/submitUser", { email:email, password:password, accessKey:accessKey }, {withCredentials: true})
             
             await Swal.fire
             ({
@@ -79,69 +79,72 @@ const AccessKey = ({accessKey}) => {
 
     if (complete === true) {return ( <App /> )}
     return (
-        <div className="AccessKey d-flex align-items-center vh-100 ">
-            <Container className="w-25">
+        <div className="d-flex align-items-center vh-100 ">
+            <Container className="">
 
-                
-                {/* <Row className="align-items-center mb-4">
-                    <Col className="d-flex justify-content-center p-0 m-0" xs="auto">
+                <Row className="">
+                    <Col className="d-flex justify-content-center" >
                         <img className="loginLogo img-fluid" src={logo} alt="Logo"/>
+                        <p className="accessKeyAppName ml-4" id="heading">Online Examination Application</p>
                     </Col>
-                    <Col className="d-flex justify-content-center text-center p-0 m-0">
-                        <h1 className="m-0" id="heading">Online Examination Application</h1>
-                    </Col>
-                </Row> */}
-
-                <Row className="align-items-center">
-                    <Col className="d-flex justify-content-center">
+                </Row>
+                
+                <Row className="mt-5">
+                    <Col className=" d-flex justify-content-center">
                         <p className="accessKeyHeading"> Set your email/password: </p>
                     </Col>
                 </Row>
                 
-                <Form className="mt-4" onSubmit={handleSubmit}>
+                <Row className="">
+                    <Col className=" mt-2 d-flex justify-content-center">
 
+                        <Form className=" accessKeySection" onSubmit={handleSubmit}>
+                        
+                            <Form.Row className="">
+                                <Form.Group as={Col} className="">
+                                    <Form.Label>First Name</Form.Label>
+                                    <Form.Control className="accessKeyData" name="fname" type="text" placeholder={userDetails.fname} readOnly required />
+                                </Form.Group>
 
-                    <Form.Row className="">
-                        <Form.Group as={Col} className="">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control name="fname" type="text" placeholder={userDetails.fname} readOnly required />
-                        </Form.Group>
+                                <Form.Group as={Col} className="">
+                                    <Form.Label>Last Name</Form.Label>
+                                    <Form.Control className="accessKeyData" name="lname" type="text" placeholder={userDetails.lname} readOnly required />
+                                </Form.Group>
+                            </Form.Row>
 
-                        <Form.Group as={Col} className="">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control name="lname" type="text" placeholder={userDetails.lname} readOnly required />
-                        </Form.Group>
-                    </Form.Row>
+                            <Form.Row className="">
+                                <Form.Group as={Col} className="">
+                                    <Form.Label>ID</Form.Label>
+                                    <Form.Control className="accessKeyData" name="id" type="text" placeholder={padDigits(userDetails.id, 5)} readOnly />
+                                </Form.Group>
 
+                                <Form.Group as={Col} className="">
+                                    <Form.Label>Account Type</Form.Label>
+                                    <Form.Control className="accessKeyData" name="accountType" type="text" placeholder={userDetails.accountType} readOnly required />
+                                </Form.Group>
+                            </Form.Row>
 
-                    <Form.Group  className="">
-                        <Form.Label>ID</Form.Label>
-                        <Form.Control name="id" type="text" placeholder={padDigits(userDetails.id, 5)} readOnly />
-                    </Form.Group>
+                            
+                            <Form.Group  className="">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control className="accessKeyChangeableData" name="email" type="email" placeholder="Set an email" value={email} onChange={handleChange} required />
+                            </Form.Group>
 
-                    <Form.Group className="">
-                        <Form.Label>Account Type</Form.Label>
-                        <Form.Control name="accountType" type="text" placeholder={userDetails.accountType} readOnly required />
-                    </Form.Group>
-
+                            <Form.Group  className="">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control className="accessKeyChangeableData" name="password" type="password" placeholder="Set a password" value={password} onChange={handleChange} required />
+                            </Form.Group>
                     
-                    <Form.Group  className="">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control name="email" type="email" placeholder="Set an email" value={email} onChange={handleChange} required />
-                    </Form.Group>
 
-                    <Form.Group  className="">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control name="password" type="password" placeholder="Set a password" value={password} onChange={handleChange} required />
-                    </Form.Group>
-                    
+                            <ButtonGroup className="mt-2">
+                                <Button type="submit" className="normalButton" variant="primary"> Confirm Changes</Button>
+                            </ButtonGroup>
+                        
+                        </Form>
 
-                    <ButtonGroup className="mt-2">
-                        <Button type="submit" className="normalButton" variant="primary"> Confirm </Button>
-                    </ButtonGroup>
-                    
-                    
-                </Form>
+                    </Col>
+
+                </Row>
             </Container>
         </div>
     )

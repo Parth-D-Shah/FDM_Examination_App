@@ -18,9 +18,6 @@ import iconManageUsers from '../../assets/manage-users-blue.png';
 import iconCreateExam from '../../assets/create-exam-blue.png';
 
 
-
-
-
 const ScreenMessage = ({loggedInUser, currentScreen}) => {
     return (
         <div>

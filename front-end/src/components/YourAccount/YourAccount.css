@@ -1,8 +1,18 @@
-#textFormatting{
-    color:white;
-    font-size: 200%;
+.yourAccountSection
+{
+    width: 50%;
+    font-size: 1.3em;
 }
 
-#buttonSpacing{
-    width: 100%;
+.yourAccountData
+{
+    font-size: 0.9em;
 }
+
+.yourAccountDataChangeable
+{
+    font-weight: bold;
+    font-size: 0.9em;
+    color: black;
+}
+
