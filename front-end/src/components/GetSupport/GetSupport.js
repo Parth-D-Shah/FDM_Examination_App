@@ -30,7 +30,7 @@ const Dashboard = ({loggedInUser}) => {
 
                 <Form.Row>
                     <Form.Group as={Col}>
-                        <Form.Label>Answer: </Form.Label>
+                        <Form.Label>Futher Information: </Form.Label>
                         <Form.Control name="editFname" type="text" placeholder="Enter Answer" required/>
                     </Form.Group>
 

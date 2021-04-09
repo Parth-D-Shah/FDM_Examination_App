@@ -1,0 +1,7 @@
+body{
+    color: white;
+}
+#box{
+    border: 3pt solid white;
+    padding: 10pt;
+}
