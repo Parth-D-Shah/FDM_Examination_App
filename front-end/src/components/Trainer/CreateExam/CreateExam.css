@@ -9,8 +9,19 @@
     width: 5em ;
 }
 
-.createExamQuestionNumber
+.createExamQuestionNumber, .createExamDetailsTitle
 {
     font-size: 1.5em;
     font-weight: bold;
+}
+
+.prevnext
+{
+    width: 7em;
+}
+
+.createExamDetails
+{
+    color: white;
+    width: 60%;
 }

@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import './CreateExam.css';
-import {Form, Button, ButtonGroup, Col, Row, InputGroup} from 'react-bootstrap'; // Container for all Rows/Components
+import {Form, Button, Col, Row, InputGroup} from 'react-bootstrap'; // Container for all Rows/Components
 
 import {useState, useEffect} from 'react'; // React states to store API info
 
@@ -22,17 +22,18 @@ const CreateExam = ({loggedInUser}) => {
     const [currentQuestion, setCurrentQuestion] = useState(0)
 
     const [buttonClicked, setButtonClicked] = useState(null)
-    const [previousDisabled, setPreviousDisabled] = useState(true)
+    const [deleteQuestionDisabled, setDeleteQuestionDisabled] = useState(true)
+    const [showExamDetails, setShowExamDetails] = useState(true)
 
     //Effect Hook 
     useEffect( () =>
     {
-        function canClickPrevious ()
+        function canDeleteQuestion ()
         {
-            if (currentQuestion == 0) {setPreviousDisabled(true)}
-            else {setPreviousDisabled(false)} 
+            if (questions.length === 1) {setDeleteQuestionDisabled(true)}
+            else {setDeleteQuestionDisabled(false)} 
         }
-        if (currentQuestion !== null) {canClickPrevious()}
+        if (currentQuestion !== null) {canDeleteQuestion()}
 
     }, [currentQuestion]) // Updates when CREATE USER access key generated
     
@@ -42,6 +43,7 @@ const CreateExam = ({loggedInUser}) => {
         var changedBox = event.target.name
         var value = event.target.value
         var currentQuestions = questions.slice()
+        var index = event.target.classList[0]
         
         if (changedBox === "questionText")
         {
@@ -52,14 +54,12 @@ const CreateExam = ({loggedInUser}) => {
 
         else if (changedBox === "answerText")
         {
-            var index = event.target.classList[0]
             currentQuestions[currentQuestion].answerOptions[index].answerText = value
             setQuestions(currentQuestions)
         }
 
         else if (changedBox === "answerMarks")
         {
-            var index = event.target.classList[0]
             currentQuestions[currentQuestion].answerOptions[index].answerMarks = value
             setQuestions(currentQuestions)
         }
@@ -113,9 +113,59 @@ const CreateExam = ({loggedInUser}) => {
             var currentQuestionNum = currentQuestion
             setCurrentQuestion(currentQuestionNum+1)
         }
+
+        if (buttonClicked === "publishExam")
+        {
+            console.log(questions)
+        }
     }
 
 
+    if (showExamDetails)
+    {
+        return (
+            <div>
+                <Row className="mt-4">
+                    <Col className="d-flex justify-content-center">
+
+                        <Form className="createExamDetails" onSubmit={handleSubmit}>
+
+
+                            <p className="createExamDetailsTitle text-center mb-4">Exam Details</p>
+
+                            
+                            <Form.Group className="">
+                                <Form.Label>Exam Title</Form.Label>
+                                <Form.Control className="createExamTitle" name="examTitle" type="text" placeholder="Enter the exam title here"  onChange={handleChange} required />
+                            </Form.Group>
+
+                            <Form.Group className="">
+                                <Form.Label>Exam Description</Form.Label>
+                                <Form.Control className="createExamDesc" name="examDesc" as="textarea" placeholder="Enter the exam description here"  onChange={handleChange} required />
+                            </Form.Group>
+
+                            <Form.Row className="">
+                                <Form.Group as={Col} className="">
+                                    <Form.Label>Exam Start Date</Form.Label>
+                                    <Form.Control className="createExamStartDate" name="examStartDate" type="datetime-local" onChange={handleChange} required />
+                                </Form.Group>
+
+                                <Form.Group as={Col} className="">
+                                    <Form.Label>Exam End Date</Form.Label>
+                                    <Form.Control className="createExamEndDate" name="examEndDate" type="datetime-local"  onChange={handleChange} required />
+                                </Form.Group>
+                            </Form.Row>
+
+                            <Button type="submit" className="mt-3 prevnext normalButton" variant="primary"> Next </Button>
+                        
+                        </Form>
+                    </Col>
+                </Row>
+            </div>
+
+
+        )
+    }
     return (
         <div>
             <Row className="mt-5">
@@ -123,7 +173,9 @@ const CreateExam = ({loggedInUser}) => {
 
                     <Form className="createExamSection" onSubmit={handleSubmit}>
 
+ 
                         <p className="createExamQuestionNumber mb-4">{"Question " + parseInt(currentQuestion+1)}</p>
+
                         
                         <Form.Group className="">
                             <Form.Label>Question Text</Form.Label>
@@ -131,38 +183,46 @@ const CreateExam = ({loggedInUser}) => {
                         </Form.Group>
 
 
-
-                        {questions[currentQuestion].answerOptions.map((answer, index) =>
-                        {
-                            var disabled = false
-                            if (questions[currentQuestion].answerOptions.length === 1) {disabled=true}
-                            return (
-                                <Form.Group key={index} className="">
-                                    <Form.Label>{"Answer Option " + parseInt(index+1)} </Form.Label>
-                                    <InputGroup>
-                                        <Form.Control className={index + " createExamAnswer"} name="answerText" type="text" placeholder="Enter an answer for your question here" value={answer.answerText} onChange={handleChange} required />
+                        
+                            {questions[currentQuestion].answerOptions.map((answer, index) =>
+                            {
+                                var disabled = false
+                                if (questions[currentQuestion].answerOptions.length === 1) {disabled=true}
+                                return (
+                                    <Form.Group key={index} className="">
+                                        <Form.Label>{"Answer Option " + parseInt(index+1)} </Form.Label>
+                                        <InputGroup>
+                                            <Form.Control className={index + " createExamAnswer"} name="answerText" type="text" placeholder="Enter an answer for your question here" value={answer.answerText} onChange={handleChange} required />
+                                            
+                                            <InputGroup.Append>
+                                                <Form.Control className={index + " createExamAnswerMarks"} name="answerMarks" type="number" placeholder="Marks" value={answer.answerMarks} onChange={handleChange} required />
+                                            </InputGroup.Append>
+        
+                                            <Button onClick={removeAnswer} className={index + " ml-2"} variant="danger" disabled={disabled}> - </Button>
+                            
                                         
-                                        <InputGroup.Append>
-                                            <Form.Control className={index + " createExamAnswerMarks"} name="answerMarks" type="number" placeholder="Marks" value={answer.answerMarks} onChange={handleChange} required />
-                                        </InputGroup.Append>
+                                        </InputGroup>
 
-                                        <Button onClick={removeAnswer} className={index + " ml-2"} variant="danger" disabled={disabled}> - </Button>
+                                        {questions[currentQuestion].answerOptions.length === parseInt(index+1) && (
+                                        <Button onClick={addAnswer} className="mt-2 normalButton" variant="primary"> + </Button>
+                                        )}
+
+                                    </Form.Group>
                                     
-                                    </InputGroup>
-                                </Form.Group>
-                            )
-                        })}
-
-                        <Button onClick={addAnswer} className="normalButton" variant="primary"> + </Button>
+                                )
+                            })}
+                            
                         
-
                         
-
-                        <div className="mt-5 pt-5">
-                            <Button onClick={prevQuestion} className="normalButton" variant="primary" disabled={previousDisabled}> Previous Question </Button>
-                            <Button type="submit" onClick={() => (setButtonClicked("nextQuestion"))} className="ml-3 normalButton" variant="primary"> Next Question </Button>
-                            <Button type="submit" onClick={() => (setButtonClicked("reviewExam"))} className="float-right ml-3 normalButton" variant="primary"> Review Exam </Button>
+                        <div className="mt-4">
+                            <Button onClick={prevQuestion} className="prevnext normalButton" variant="primary"> Previous </Button>
+                            <Button type="submit" onClick={() => (setButtonClicked("nextQuestion"))} className="prevnext ml-3 normalButton" variant="primary"> Next </Button>
+                            <Button onClick={removeAnswer} className="ml-3" variant="danger" disabled={deleteQuestionDisabled}> Delete Question </Button>
                         </div>
+
+
+                        <Button type="submit" onClick={() => (setButtonClicked("publishExam"))} className="mt-1 float-right normalButton" variant="primary"> Publish Exam </Button>
+
 
                         
                     </Form>
@@ -170,9 +230,7 @@ const CreateExam = ({loggedInUser}) => {
                 </Col>
 
             </Row>
-        </div>
-
-        
+        </div>  
     )
     }
     
