@@ -78,7 +78,7 @@ const YourAccount = ({loggedInUser}) => {
     return (
         <div >
         
-            <Row className="mt-5">
+            <Row className="mt-4">
                 <Col className="d-flex justify-content-center">
 
                     <Form className="yourAccountSection" onSubmit={handleSubmit}>
