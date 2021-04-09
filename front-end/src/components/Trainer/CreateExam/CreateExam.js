@@ -8,6 +8,12 @@ import Axios from 'axios' // for handling API Call
 import Swal from 'sweetalert2'
 
 const CreateExam = ({loggedInUser}) => {
+    const [examTitle, setExamTitle] = useState("")
+    const [examDescription, setExamDescription] = useState("")
+    const [examStartDate, setExamStartDate] = useState("")
+    const [examEndDate, setExamEndDate] = useState("")
+
+
     const [questions, setQuestions] = useState(
         [
             {
@@ -23,7 +29,10 @@ const CreateExam = ({loggedInUser}) => {
 
     const [buttonClicked, setButtonClicked] = useState(null)
     const [deleteQuestionDisabled, setDeleteQuestionDisabled] = useState(true)
+    const [questionDeleted, setQuestionDeleted] = useState(0)
+    
     const [showExamDetails, setShowExamDetails] = useState(true)
+    const [showReviewExam, setShowReviewExam] = useState(false)
 
     //Effect Hook 
     useEffect( () =>
@@ -35,13 +44,14 @@ const CreateExam = ({loggedInUser}) => {
         }
         if (currentQuestion !== null) {canDeleteQuestion()}
 
-    }, [currentQuestion]) // Updates when CREATE USER access key generated
+    }, [currentQuestion, questionDeleted])
     
     
     function handleChange(event)
     {
         var changedBox = event.target.name
         var value = event.target.value
+        
         var currentQuestions = questions.slice()
         var index = event.target.classList[0]
         
@@ -64,7 +74,27 @@ const CreateExam = ({loggedInUser}) => {
             setQuestions(currentQuestions)
         }
 
+        else if (changedBox === "examTitle")
+        {
+            setExamTitle(value)
+        }
+
+        else if (changedBox === "examDesc")
+        {
+            setExamDescription(value)
+        }
+
+        else if (changedBox === "examStartDate")
+        {
+            setExamStartDate(value)
+        }
+
+        else if (changedBox === "examEndDate")
+        {
+            setExamEndDate(value)
+        }
     }
+
 
     function addAnswer ()
     {
@@ -84,41 +114,137 @@ const CreateExam = ({loggedInUser}) => {
         setQuestions(currentQuestions)     
     }
 
-
-    function prevQuestion ()
+    async function deleteQuestion (event)
     {
-        var currentQuestionNum = currentQuestion
-        setCurrentQuestion(currentQuestionNum-1)
+        await Swal.fire(
+        {
+            title: 'Are you sure you want to delete this question?',
+            showCancelButton: true,
+            confirmButtonText: `Yes`,
+        }).then((result) => 
+        {
+            if (result.isConfirmed) 
+            {
+                var currentQuestions = questions.slice()
+                currentQuestions.splice(currentQuestion, 1)
+                
+                if (questions.length === currentQuestion+1) {setCurrentQuestion(currentQuestion-1)}
+                
+                setQuestions(currentQuestions)
+                setQuestionDeleted(questionDeleted+1)
+                //console.log(questions)
+                
+            }
+     
+        })
     }
 
 
-    function handleSubmit (event)
+    function prevQuestion ()
+    {
+        if (currentQuestion === 0)
+        {
+            setShowExamDetails(true)
+        }
+        else
+        {
+            var currentQuestionNum = currentQuestion
+            setCurrentQuestion(currentQuestionNum-1)
+        }
+
+    }
+
+
+    async function handleSubmit (event)
     {
         event.preventDefault(event)
         
         if (buttonClicked === "nextQuestion")
         {
-            var currentQuestions = questions.slice()
-            var newQuestion =
+            if (currentQuestion+1 === questions.length)
             {
-                questionText: "",
-                answerOptions: 
-                [
-                    {answerText: "", answerMarks: ""},
-                ]
+                await Swal.fire(
+                    {
+                        title: 'Do you want to create another question?',
+                        showCancelButton: true,
+                        confirmButtonText: `Yes`,
+                    }).then((result) => 
+                    {
+                        if (result.isConfirmed) 
+                        {
+                            var currentQuestions = questions.slice()
+                            var newQuestion =
+                            {
+                                questionText: "",
+                                answerOptions: 
+                                [
+                                    {answerText: "", answerMarks: ""},
+                                ]
+                            }
+                            currentQuestions.push(newQuestion)
+                            setQuestions(currentQuestions)
+                            setCurrentQuestion(currentQuestion+1)
+                        }
+                    })
             }
-            currentQuestions.push(newQuestion)
-            setQuestions(currentQuestions)
+
+            else {setCurrentQuestion(currentQuestion+1)}
             
-            var currentQuestionNum = currentQuestion
-            setCurrentQuestion(currentQuestionNum+1)
+            
         }
 
-        if (buttonClicked === "publishExam")
+
+        if (buttonClicked === "reviewExam")
         {
             console.log(questions)
+            setShowReviewExam(true)
         }
     }
+
+    async function handleSubmitExamDetails (event)
+    {
+        event.preventDefault(event)
+    
+        if (examStartDate >= examEndDate || new Date(examStartDate) <= new Date())
+        {
+            await Swal.fire
+            ({
+                icon: 'error',
+                title: 'Incorrect Exam Details',
+                text: 'Invalid exam start/end dates selected'
+            })
+        }
+
+        else
+        {
+            setShowExamDetails(false)
+        }
+    }
+
+    function getTotalMarksAvailable ()
+    {
+        var totalMarks = 0;
+        var i;
+        var j;
+        
+        for (i=0; i<questions.length; i++)
+        {
+            var currentQuestion = questions[i]
+            for (j=0; j<currentQuestion.answerOptions.length; j++)
+            {
+                var currentAnswer = currentQuestion.answerOptions[j]
+                if (parseInt(currentAnswer.answerMarks) > 0) {totalMarks = totalMarks + parseInt(currentAnswer.answerMarks)}
+            }
+        }
+        return totalMarks
+    }
+
+    async function handleSubmitPublishExam (event)
+    {
+        event.preventDefault(event)
+        console.log("COMPLETE THIS")
+    }
+
 
 
     if (showExamDetails)
@@ -128,7 +254,7 @@ const CreateExam = ({loggedInUser}) => {
                 <Row className="mt-4">
                     <Col className="d-flex justify-content-center">
 
-                        <Form className="createExamDetails" onSubmit={handleSubmit}>
+                        <Form className="createExamDetails" onSubmit={handleSubmitExamDetails}>
 
 
                             <p className="createExamDetailsTitle text-center mb-4">Exam Details</p>
@@ -136,23 +262,23 @@ const CreateExam = ({loggedInUser}) => {
                             
                             <Form.Group className="">
                                 <Form.Label>Exam Title</Form.Label>
-                                <Form.Control className="createExamTitle" name="examTitle" type="text" placeholder="Enter the exam title here"  onChange={handleChange} required />
+                                <Form.Control className="createExamTitle" name="examTitle" type="text" placeholder="Enter the exam title here"  value={examTitle} onChange={handleChange} required />
                             </Form.Group>
 
                             <Form.Group className="">
                                 <Form.Label>Exam Description</Form.Label>
-                                <Form.Control className="createExamDesc" name="examDesc" as="textarea" placeholder="Enter the exam description here"  onChange={handleChange} required />
+                                <Form.Control className="createExamDesc" name="examDesc" as="textarea" placeholder="Enter the exam description here"  value={examDescription} onChange={handleChange} required />
                             </Form.Group>
 
                             <Form.Row className="">
                                 <Form.Group as={Col} className="">
                                     <Form.Label>Exam Start Date</Form.Label>
-                                    <Form.Control className="createExamStartDate" name="examStartDate" type="datetime-local" onChange={handleChange} required />
+                                    <Form.Control className="createExamStartDate" name="examStartDate" type="datetime-local" value={examStartDate} onChange={handleChange} required />
                                 </Form.Group>
 
                                 <Form.Group as={Col} className="">
                                     <Form.Label>Exam End Date</Form.Label>
-                                    <Form.Control className="createExamEndDate" name="examEndDate" type="datetime-local"  onChange={handleChange} required />
+                                    <Form.Control className="createExamEndDate" name="examEndDate" type="datetime-local"  value={examEndDate} onChange={handleChange} required />
                                 </Form.Group>
                             </Form.Row>
 
@@ -162,10 +288,69 @@ const CreateExam = ({loggedInUser}) => {
                     </Col>
                 </Row>
             </div>
-
-
         )
     }
+
+
+    if (showReviewExam)
+    {
+        return (
+            <Row className="mt-4">
+                <Col className="d-flex justify-content-center">
+
+                    <Form className="createExamDetails" onSubmit={handleSubmitPublishExam}>
+
+
+                        <p className="createExamDetailsTitle text-center mb-4">Exam Summary</p>
+
+                        
+                        <Form.Group className="">
+                            <Form.Label>Exam Title</Form.Label>
+                            <Form.Control className="createExamSummary" type="text" readOnly value={examTitle} />
+                        </Form.Group>
+
+                        <Form.Group className="">
+                            <Form.Label>Exam Description</Form.Label>
+                            <Form.Control className="createExamSummary" as="textarea" readOnly value={examDescription} />
+                        </Form.Group>
+
+                        <Form.Row className="">
+                            <Form.Group as={Col} className="">
+                                <Form.Label>Exam Start Date</Form.Label>
+                                <Form.Control className="createExamSummary" type="datetime-local" readOnly value={examStartDate} />
+                            </Form.Group>
+
+                            <Form.Group as={Col} className="">
+                                <Form.Label>Exam End Date</Form.Label>
+                                <Form.Control className="createExamSummary" type="datetime-local"  readOnly value={examEndDate} />
+                            </Form.Group>
+                        </Form.Row>
+
+                        <Form.Row className="">
+                            <Form.Group as={Col} className="">
+                                <Form.Label>Total Number of Questions</Form.Label>
+                                <Form.Control className="createExamSummary" type="text" readOnly value={questions.length} />
+                            </Form.Group>
+
+                            <Form.Group as={Col} className="">
+                                <Form.Label>Total Marks Available</Form.Label>
+                                <Form.Control className="createExamSummary" type="text" readOnly value={getTotalMarksAvailable()} />
+                            </Form.Group>
+                        </Form.Row>
+
+                        <div className="mt-3">
+                            <Button onClick={() => {setShowReviewExam(false); setShowExamDetails(true)}} className="normalButton" variant="primary"> Make Changes </Button>
+                            <Button type="submit" className="float-right normalButton" variant="primary"> Publish Exam </Button>
+                        </div>
+                    
+                    </Form>
+                </Col>
+            </Row>
+        )
+    }
+    
+    
+    
     return (
         <div>
             <Row className="mt-5">
@@ -217,11 +402,11 @@ const CreateExam = ({loggedInUser}) => {
                         <div className="mt-4">
                             <Button onClick={prevQuestion} className="prevnext normalButton" variant="primary"> Previous </Button>
                             <Button type="submit" onClick={() => (setButtonClicked("nextQuestion"))} className="prevnext ml-3 normalButton" variant="primary"> Next </Button>
-                            <Button onClick={removeAnswer} className="ml-3" variant="danger" disabled={deleteQuestionDisabled}> Delete Question </Button>
+                            <Button onClick={deleteQuestion} className="ml-3" variant="danger" disabled={deleteQuestionDisabled}> Delete Question </Button>
                         </div>
 
 
-                        <Button type="submit" onClick={() => (setButtonClicked("publishExam"))} className="mt-1 float-right normalButton" variant="primary"> Publish Exam </Button>
+                        <Button type="submit" onClick={() => (setButtonClicked("reviewExam"))} className="mt-1 float-right normalButton" variant="primary"> Review Exam </Button>
 
 
                         

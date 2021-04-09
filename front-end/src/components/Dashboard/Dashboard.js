@@ -118,8 +118,6 @@ const Dashboard = () => {
                 {chosenScreen === "TakeExam" && (<TakeExam loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "GetSupport" && (<GetSupport loggedInUser={loggedInUser}/>)}
 
-                
-            
             </Container>
 
 
