@@ -358,8 +358,6 @@ const ManageUsers = ({loggedInUser}) => {
 
                     </Form>
                 
-                
-                
                 </Col>
             </Row>
         </div>

@@ -14,6 +14,7 @@ import YourAccount from '../YourAccount/YourAccount'
 
 // System Admin screens
 import ManageUsers from '../Sysadmin/ManageUsers/ManageUsers'
+import ManageTickets from '../Sysadmin/ManageTickets/ManageTickets'
 
 // Trainer screens
 import CreateExam from '../Trainer/CreateExam/CreateExam'
@@ -117,6 +118,7 @@ const Dashboard = () => {
                 {chosenScreen === "CreateExam" && (<CreateExam loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "TakeExam" && (<TakeExam loggedInUser={loggedInUser}/>)}
                 {chosenScreen === "GetSupport" && (<GetSupport loggedInUser={loggedInUser}/>)}
+                {chosenScreen === "ManageTickets" && (<ManageTickets loggedInUser={loggedInUser}/>)}
 
                 
             
