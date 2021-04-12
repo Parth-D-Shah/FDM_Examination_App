@@ -6,7 +6,7 @@
 
 .createExamAnswerMarks
 {
-    width: 5em ;
+    width: 4.5em ;
 }
 
 .createExamQuestionNumber, .createExamDetailsTitle
@@ -23,10 +23,20 @@
 .createExamDetails
 {
     color: white;
-    width: 60%;
+    width: 70%;
 }
 
 .createExamSummary
 {
     font-weight: bold;
+}
+
+.createExamDetailsContent
+{
+    font-size: 1.2em;
+}
+
+.createExamQuestions
+{
+    font-size: 1.1em;
 }

@@ -261,80 +261,72 @@ app.get('/getUsers', (req, res) =>
 
 
 
-
-
-
-app.post("/createAnswer", (req, res) =>
+app.post("/createExam", (req, res) =>
 {
-    const {questionid, answerText} = req.body
-    
-    
-        db.run(`INSERT INTO answers (questionid, answerText) VALUES ('${questionid}', '${answerText}')`, (err) =>
+    const {examTitle, examDescription, examStartDate, examEndDate, questions} = req.body
+    const questionsID = []
+    const answers = []
+
+    db.run(`INSERT INTO exam (title, description, startDate, endDate) VALUES ('${examTitle}', '${examDescription}', '${examStartDate}', '${examEndDate}')`, (err) =>
+    {
+        if (err){console.log(err.message); res.status(500).json({message: err.message})}
+        else
         {
-            if (err){console.log(err.message); res.status(500).json({message: err.message})}
-            else
+            db.all(`select last_insert_rowid()`, async (err, row) =>
             {
-                db.all(`select last_insert_rowid()`, (err, row) =>
+                if (err){console.log(err.message); res.status(500).json({message: err.message})}
+        
+                else 
                 {
-                    if (err){console.log(err.message); res.status(500).json({message: err.message})}
-            
-                    else {res.status(200).json({message: row[0]["last_insert_rowid()"]})}
-                })
-            }
-        })
-    
-})
+                    var examID = row[0]["last_insert_rowid()"]
 
+                    var i;
+                    for (i=0; i<questions.length; i++)
+                    {
+                        var currentQuestion = questions[i]
+                        
+                        db.run(`INSERT INTO question (examID, questionText) VALUES (${examID}, '${currentQuestion.questionText}')`, (err) =>
+                        {
+                            if (err){console.log(err.message); res.status(500).json({message: err.message})}
+                            else
+                            {
+                                db.get(`select last_insert_rowid()`, (err, row) =>
+                                {
+                                    if (err){console.log(err.message); res.status(500).json({message: err.message})}
+                            
+                                    else {questionsID.push(row['last_insert_rowid()'])}
+                                })
+                            }
 
-app.get('/getAnswer', (req, res) =>
-{
-    db.all(`SELECT id, questionid, answerText FROM answers`, (err, row) =>
-    {
-        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+                        })
 
-        else { res.status(200).json(row) }
+                        answers.push(currentQuestion.answerOptions)
+
+                        await new Promise(r => setTimeout(r, 100))
+                    }
+                    
+                    var j;
+                    for (j=0; j<answers.length; j++)
+                    {
+                        var currentAnswerOptions = answers[j]
+                        var currentQuestionID = questionsID[j]
+                        
+                        var k;
+                        for (k=0; k<currentAnswerOptions.length; k++)
+                        {
+                            var currentAnswer = currentAnswerOptions[k]
+                            db.run(`INSERT INTO answer (questionID, answerText, answerMarks) VALUES (${currentQuestionID}, '${currentAnswer.answerText}', ${currentAnswer.answerMarks})`, (err) =>
+                            {
+                                if (err){console.log(err.message); res.status(500).json({message: err.message})}
+                            })
+                        }
+                    }
+                    res.status(200).json({message: "exam successfully created"})
+                }
+            })
+        }
     })
 })
 
 
-app.post("/createQuestion", (req, res) =>
-{
-    const {examid, questionText} = req.body
-    {
-        db.run(`INSERT into question(id, examid, questionText) VALUES ('${examid}', '${questionText}')`, (err) =>
-        {
-            if (err){console.log(err.message); res.status(500).json({message: err.message})}
-            else
-            {
-                db.all(`select last_insert_rowid()`, (err, row) =>
-                {
-                    if (err){console.log(err.message); res.status(500).json({message: err.message})}
 
-                    else {res.status(200).json({message: row[0]["last_insert_rowid()"]})}
-                })
-            }
-        })
-    }
-})
-
-
-app.get('/getQuestion', (req, res) =>
-{
-    db.all(`SELECT id, examid, questionText, FROM question`, (err, row) =>
-    {
-        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
-
-        else { res.status(200).json(row) }
-    })
-})
-
-app.get('/getUserExams', (req, res) =>
-{
-    const {userid} = req.body
-    db.all(`SELECT userid, examid FROM examTakers where userid= ${userid}`, (err, row) =>
-    {
-        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
-
-        else { res.status(200).json(row) }
-    })
-})

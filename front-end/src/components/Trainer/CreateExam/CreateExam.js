@@ -196,7 +196,7 @@ const CreateExam = ({loggedInUser}) => {
 
         if (buttonClicked === "reviewExam")
         {
-            console.log(questions)
+            setCurrentQuestion(0)
             setShowReviewExam(true)
         }
     }
@@ -204,6 +204,9 @@ const CreateExam = ({loggedInUser}) => {
     async function handleSubmitExamDetails (event)
     {
         event.preventDefault(event)
+        console.log(examStartDate)
+        console.log(examEndDate)
+
     
         if (examStartDate >= examEndDate || new Date(examStartDate) <= new Date())
         {
@@ -241,8 +244,62 @@ const CreateExam = ({loggedInUser}) => {
 
     async function handleSubmitPublishExam (event)
     {
-        event.preventDefault(event)
-        console.log("COMPLETE THIS")
+        event.preventDefault(event);
+        await Swal.fire(
+        {
+            title: 'Do you want to publish this exam?',
+            showCancelButton: true,
+            confirmButtonText: `Yes`,
+        }).then( async (result) => 
+        {
+            if (result.isConfirmed) 
+            {
+                console.log(questions)
+                try
+                {
+                    await Axios.post("http://localhost:3001/createExam", { examTitle:examTitle, examDescription:examDescription, examStartDate:examStartDate, examEndDate:examEndDate, questions:questions }, {withCredentials: true})
+                    
+                    await Swal.fire
+                    ({
+                        icon: 'success',
+                        title: 'Exam creation successful',
+                    }).then ( () =>
+                    {
+                        setExamTitle("")
+                        setExamDescription("")
+                        setExamStartDate("")
+                        setExamEndDate("")
+                        setQuestions(
+                            [
+                                {
+                                    questionText: "",
+                                    answerOptions: 
+                                    [
+                                        {answerText: "", answerMarks: ""},
+                                    ]
+                                }
+                            ]
+                        )
+                        setCurrentQuestion(0)
+                        setButtonClicked(null)
+                        setDeleteQuestionDisabled(true)
+                        setQuestionDeleted(0)
+                        setShowReviewExam(false)
+                        setShowExamDetails(true)
+                    })
+                }
+                
+                catch (err)
+                { 
+                    await Swal.fire
+                    ({
+                        icon: 'error',
+                        title: 'Exam creation unsuccessful',
+                        text: err.response.data.message
+                    })
+                }
+            }
+        })
     }
 
 
@@ -261,24 +318,24 @@ const CreateExam = ({loggedInUser}) => {
 
                             
                             <Form.Group className="">
-                                <Form.Label>Exam Title</Form.Label>
-                                <Form.Control className="createExamTitle" name="examTitle" type="text" placeholder="Enter the exam title here"  value={examTitle} onChange={handleChange} required />
+                                <Form.Label className="createExamDetailsContent">Exam Title</Form.Label>
+                                <Form.Control className="createExamDetailsContent" name="examTitle" type="text" placeholder="Enter the exam title here"  value={examTitle} onChange={handleChange} required />
                             </Form.Group>
 
                             <Form.Group className="">
-                                <Form.Label>Exam Description</Form.Label>
-                                <Form.Control className="createExamDesc" name="examDesc" as="textarea" placeholder="Enter the exam description here"  value={examDescription} onChange={handleChange} required />
+                                <Form.Label className="createExamDetailsContent">Exam Description</Form.Label>
+                                <Form.Control className="createExamDetailsContent" name="examDesc" as="textarea" placeholder="Enter the exam description here"  value={examDescription} onChange={handleChange} required />
                             </Form.Group>
 
                             <Form.Row className="">
                                 <Form.Group as={Col} className="">
-                                    <Form.Label>Exam Start Date</Form.Label>
-                                    <Form.Control className="createExamStartDate" name="examStartDate" type="datetime-local" value={examStartDate} onChange={handleChange} required />
+                                    <Form.Label className="createExamDetailsContent">Exam Start Date</Form.Label>
+                                    <Form.Control className="createExamDetailsContent" name="examStartDate" type="datetime-local" value={examStartDate} onChange={handleChange} required />
                                 </Form.Group>
 
                                 <Form.Group as={Col} className="">
-                                    <Form.Label>Exam End Date</Form.Label>
-                                    <Form.Control className="createExamEndDate" name="examEndDate" type="datetime-local"  value={examEndDate} onChange={handleChange} required />
+                                    <Form.Label className="createExamDetailsContent">Exam End Date</Form.Label>
+                                    <Form.Control className="createExamDetailsContent" name="examEndDate" type="datetime-local"  value={examEndDate} onChange={handleChange} required />
                                 </Form.Group>
                             </Form.Row>
 
@@ -305,36 +362,36 @@ const CreateExam = ({loggedInUser}) => {
 
                         
                         <Form.Group className="">
-                            <Form.Label>Exam Title</Form.Label>
-                            <Form.Control className="createExamSummary" type="text" readOnly value={examTitle} />
+                            <Form.Label className="createExamDetailsContent">Exam Title</Form.Label>
+                            <Form.Control className="createExamDetailsContent" type="text" readOnly value={examTitle} />
                         </Form.Group>
 
                         <Form.Group className="">
-                            <Form.Label>Exam Description</Form.Label>
-                            <Form.Control className="createExamSummary" as="textarea" readOnly value={examDescription} />
+                            <Form.Label className="createExamDetailsContent">Exam Description</Form.Label>
+                            <Form.Control className="createExamDetailsContent" as="textarea" readOnly value={examDescription} />
                         </Form.Group>
 
                         <Form.Row className="">
                             <Form.Group as={Col} className="">
-                                <Form.Label>Exam Start Date</Form.Label>
-                                <Form.Control className="createExamSummary" type="datetime-local" readOnly value={examStartDate} />
+                                <Form.Label className="createExamDetailsContent">Exam Start Date</Form.Label>
+                                <Form.Control className="createExamDetailsContent" type="datetime-local" readOnly value={examStartDate} />
                             </Form.Group>
 
                             <Form.Group as={Col} className="">
-                                <Form.Label>Exam End Date</Form.Label>
-                                <Form.Control className="createExamSummary" type="datetime-local"  readOnly value={examEndDate} />
+                                <Form.Label className="createExamDetailsContent">Exam End Date</Form.Label>
+                                <Form.Control className="createExamDetailsContent" type="datetime-local"  readOnly value={examEndDate} />
                             </Form.Group>
                         </Form.Row>
 
                         <Form.Row className="">
                             <Form.Group as={Col} className="">
-                                <Form.Label>Total Number of Questions</Form.Label>
-                                <Form.Control className="createExamSummary" type="text" readOnly value={questions.length} />
+                                <Form.Label className="createExamDetailsContent">Total Number of Questions</Form.Label>
+                                <Form.Control className="createExamDetailsContent" type="text" readOnly value={questions.length} />
                             </Form.Group>
 
                             <Form.Group as={Col} className="">
-                                <Form.Label>Total Marks Available</Form.Label>
-                                <Form.Control className="createExamSummary" type="text" readOnly value={getTotalMarksAvailable()} />
+                                <Form.Label className="createExamDetailsContent">Total Marks Available</Form.Label>
+                                <Form.Control className="createExamDetailsContent" type="text" readOnly value={getTotalMarksAvailable()} />
                             </Form.Group>
                         </Form.Row>
 
@@ -363,8 +420,8 @@ const CreateExam = ({loggedInUser}) => {
 
                         
                         <Form.Group className="">
-                            <Form.Label>Question Text</Form.Label>
-                            <Form.Control className="createExamQuestion" name="questionText" as="textarea" placeholder="Enter your question text here" value={questions[currentQuestion].questionText} onChange={handleChange} required />
+                            <Form.Label className="createExamQuestions">Question Text</Form.Label>
+                            <Form.Control className="createExamQuestions" name="questionText" as="textarea" placeholder="Enter your question text here" value={questions[currentQuestion].questionText} onChange={handleChange} required />
                         </Form.Group>
 
 
@@ -374,13 +431,13 @@ const CreateExam = ({loggedInUser}) => {
                                 var disabled = false
                                 if (questions[currentQuestion].answerOptions.length === 1) {disabled=true}
                                 return (
-                                    <Form.Group key={index} className="">
+                                    <Form.Group key={index} className="createExamQuestions">
                                         <Form.Label>{"Answer Option " + parseInt(index+1)} </Form.Label>
                                         <InputGroup>
-                                            <Form.Control className={index + " createExamAnswer"} name="answerText" type="text" placeholder="Enter an answer for your question here" value={answer.answerText} onChange={handleChange} required />
+                                            <Form.Control className={index + " createExamQuestions"} name="answerText" type="text" placeholder="Enter an answer for your question here" value={answer.answerText} onChange={handleChange} required />
                                             
                                             <InputGroup.Append>
-                                                <Form.Control className={index + " createExamAnswerMarks"} name="answerMarks" type="number" placeholder="Marks" value={answer.answerMarks} onChange={handleChange} required />
+                                                <Form.Control className={index + " createExamQuestions createExamAnswerMarks"} name="answerMarks" type="number" placeholder="Marks" value={answer.answerMarks} onChange={handleChange} required />
                                             </InputGroup.Append>
         
                                             <Button onClick={removeAnswer} className={index + " ml-2"} variant="danger" disabled={disabled}> - </Button>
@@ -403,10 +460,11 @@ const CreateExam = ({loggedInUser}) => {
                             <Button onClick={prevQuestion} className="prevnext normalButton" variant="primary"> Previous </Button>
                             <Button type="submit" onClick={() => (setButtonClicked("nextQuestion"))} className="prevnext ml-3 normalButton" variant="primary"> Next </Button>
                             <Button onClick={deleteQuestion} className="ml-3" variant="danger" disabled={deleteQuestionDisabled}> Delete Question </Button>
+                            <Button type="submit" onClick={() => (setButtonClicked("reviewExam"))} className="float-right normalButton" variant="primary"> Review Exam </Button>
                         </div>
 
 
-                        <Button type="submit" onClick={() => (setButtonClicked("reviewExam"))} className="mt-1 float-right normalButton" variant="primary"> Review Exam </Button>
+                        
 
 
                         
