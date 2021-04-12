@@ -312,11 +312,9 @@ const CreateExam = ({loggedInUser}) => {
                     <Col className="d-flex justify-content-center">
 
                         <Form className="createExamDetails" onSubmit={handleSubmitExamDetails}>
-
-
+                            
                             <p className="createExamDetailsTitle text-center mb-4">Exam Details</p>
 
-                            
                             <Form.Group className="">
                                 <Form.Label className="createExamDetailsContent">Exam Title</Form.Label>
                                 <Form.Control className="createExamDetailsContent" name="examTitle" type="text" placeholder="Enter the exam title here"  value={examTitle} onChange={handleChange} required />
@@ -410,7 +408,7 @@ const CreateExam = ({loggedInUser}) => {
     
     return (
         <div>
-            <Row className="mt-5">
+            <Row className="mt-4">
                 <Col className="d-flex justify-content-center">
 
                     <Form className="createExamSection" onSubmit={handleSubmit}>

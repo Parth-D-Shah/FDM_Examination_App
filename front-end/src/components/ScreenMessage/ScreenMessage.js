@@ -17,6 +17,10 @@ import iconManageUsers from '../../assets/manage-users-blue.png';
 //Trainer icons
 import iconCreateExam from '../../assets/create-exam-blue.png';
 
+//Trainee icons
+import iconTakeExam from '../../assets/take-exam-blue.png';
+import iconViewResults from '../../assets/view-results-blue.png';
+
 
 const ScreenMessage = ({loggedInUser, currentScreen}) => {
     return (
@@ -83,7 +87,7 @@ const ScreenMessage = ({loggedInUser, currentScreen}) => {
                         {currentScreen === "TakeExam" && (
                             <Row className="align-items-center">
                                 <Col className="d-flex justify-content-center" xs="auto">
-                                    <img className="screenMessageImage img-fluid" src={iconYourAccount} alt="Take Exam"/>
+                                    <img className="screenMessageImage img-fluid" src={iconTakeExam} alt="Take Exam"/>
                                 </Col>
                                 <Col className="ml-3">
                                     Take Exam
