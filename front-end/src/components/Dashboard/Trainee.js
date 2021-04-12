@@ -16,7 +16,7 @@ const Sysadmin = ({changeScreen}) => {
             <Row className="mt-5">
                 
                 <Col className="" xs="4">
-                    <Card bg="dark" text="white" className="card text-center">
+                    <Card bg="dark" text="white" className="cardTrainee text-center">
                         <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconYourAccount}/>
                         <Card.Body>
                             <Card.Title> Your Account </Card.Title>
@@ -33,7 +33,7 @@ const Sysadmin = ({changeScreen}) => {
 
 
                 <Col className="" xs="4">
-                    <Card bg="dark" text="white" className="card text-center " >
+                    <Card bg="dark" text="white" className="cardTrainee text-center " >
                         <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconTakeExam}/>
                         <Card.Body>
                             <Card.Title> Take Exam </Card.Title>
@@ -48,14 +48,8 @@ const Sysadmin = ({changeScreen}) => {
                     </Card>
                 </Col>
 
-
-
-
-            </Row>
-
-            <Row className="mt-4">
                 <Col className="" xs="4">
-                        <Card bg="dark" text="white" className="card text-center">
+                        <Card bg="dark" text="white" className="cardTrainee text-center">
                             <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconViewResults}/>
                             <Card.Body>
                                 <Card.Title> View Results </Card.Title>
@@ -68,10 +62,10 @@ const Sysadmin = ({changeScreen}) => {
                                 </div>
                             </Card.Body>
                         </Card>
-                    </Col>
-                
-                <Col className="" xs="4">
-                    <Card bg="dark" text="white" className="card text-center">
+                </Col>
+
+                <Col className="mt-4 mx-auto" xs="4">
+                    <Card bg="dark" text="white" className="cardTrainee text-center">
                         <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconTicket}/>
                         <Card.Body>
                             <Card.Title> Get Support </Card.Title>
