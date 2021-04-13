@@ -13,9 +13,9 @@ const Sysadmin = ({changeScreen}) => {
     return (
         <div>
 
-            <Row className="mt-5">
+            <Row className="mt-4">
                 
-                <Col className="" xs="4">
+                <Col className="d-flex justify-content-center pr-0" xs="6">
                     <Card bg="dark" text="white" className="cardTrainee text-center">
                         <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconYourAccount}/>
                         <Card.Body>
@@ -32,7 +32,7 @@ const Sysadmin = ({changeScreen}) => {
 
 
 
-                <Col className="" xs="4">
+                <Col className="d-flex justify-content-center pl-0" xs="6">
                     <Card bg="dark" text="white" className="cardTrainee text-center " >
                         <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconTakeExam}/>
                         <Card.Body>
@@ -48,7 +48,7 @@ const Sysadmin = ({changeScreen}) => {
                     </Card>
                 </Col>
 
-                <Col className="" xs="4">
+                <Col className="mt-4 d-flex justify-content-center pr-0" xs="6">
                         <Card bg="dark" text="white" className="cardTrainee text-center">
                             <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconViewResults}/>
                             <Card.Body>
@@ -64,7 +64,7 @@ const Sysadmin = ({changeScreen}) => {
                         </Card>
                 </Col>
 
-                <Col className="mt-4 mx-auto" xs="4">
+                <Col className="mt-4 d-flex justify-content-center pl-0" xs="6">
                     <Card bg="dark" text="white" className="cardTrainee text-center">
                         <Card.Img className="pt-3 cardImage mx-auto" variant="top" src={iconTicket}/>
                         <Card.Body>

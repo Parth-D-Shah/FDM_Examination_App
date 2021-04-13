@@ -62,7 +62,7 @@ const Dashboard = () => {
             var loggedInUserAccountType = loggedInResponseData.accountType 
             if (loggedInUserAccountType === "System Admin") {setUserFunctionality(["Dashboard", "Your Account", "Manage Users", "Manage Tickets"])}
             else if (loggedInUserAccountType === "Trainer") {setUserFunctionality(["Dashboard", "Your Account", "Create Exam", "Get Support"])}
-            else if (loggedInUserAccountType === "Trainee") {setUserFunctionality(["Dashboard", "Your Account", "Take Exam", "Get Support"])}
+            else if (loggedInUserAccountType === "Trainee") {setUserFunctionality(["Dashboard", "Your Account", "Take Exam", "View Results", "Get Support"])}
         }
         
         fetchLoggedInUser()

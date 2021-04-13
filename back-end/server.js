@@ -328,5 +328,31 @@ app.post("/createExam", (req, res) =>
     })
 })
 
+app.get('/getExams', (req, res) =>
+{
+    const exams = []
+    db.all(`SELECT * FROM exam`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else 
+        { 
+            var i;
+            for (i=0; i<row.length; i++)
+            {
+                examStartDate = new Date(row[i].startDate)
+                examEndDate = new Date(row[i].endDate)
+                todayDate = new Date()
+
+                if (examEndDate > todayDate && examStartDate <= todayDate)
+                {
+                    exams.push(row[i])
+                }
+            }
+            res.status(200).json(exams)
+        }
+    })
+})
+
 
 

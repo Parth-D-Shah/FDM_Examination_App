@@ -1,0 +1,34 @@
+.dateDue
+{
+    color: rgb(179, 48, 48) !important;
+}
+
+.takeExamSection
+{
+    width: 70%;
+}
+
+.takeExamQuestion
+{
+    font-size: 2em;
+}
+
+.takeExamOption
+{
+    padding: 0.5em;
+    border: 1pt solid white;
+    margin-bottom: 1em;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.takeExamOption:active
+{
+    border-color: blue
+}
+
+.takeExamRadio 
+{ 
+    margin-left: 0.5em;
+    transform: scale(1.5); 
+}
