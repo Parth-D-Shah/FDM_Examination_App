@@ -354,6 +354,79 @@ app.get('/getExams', (req, res) =>
     })
 })
 
+app.post('/getTakenExams', (req, res) =>
+{
+    const {userID} = req.body
+    db.all(`SELECT examID FROM result WHERE userID=${userID}`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else { res.status(200).json(row)}
+    })
+})
+
+
+
+app.post('/getExamContent', (req, res) =>
+{
+    const {examID} = req.body
+
+    db.all(`SELECT id, questionText FROM question WHERE examID=${examID}`, (err, row1) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else 
+        { 
+            db.all(`SELECT * FROM answer`, (err, row2) =>
+            {
+                if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+        
+                else 
+                {
+                    var questions = row1.slice() 
+                    var answers = []
+                    
+                    var i
+                    for (i=0; i<questions.length; i++)
+                    {
+                        var a = []
+                        var j
+                        for (j=0; j<row2.length; j++)
+                        {
+                            if (row2[j].questionID === questions[i].id)
+                            {
+                                a.push(row2[j])
+                            }
+                        }
+                        answers.push(a)
+                    }
+
+                    var examContent = []
+                    examContent.push(questions, answers)
+
+                    res.status(200).json(examContent)
+                }
+            })
+        }
+    })  
+})
+
+app.post('/submitExam', (req, res) =>
+{
+    const {userID, examID, score} = req.body
+
+    db.run(`INSERT INTO result (userID, examID, score) VALUES (${userID}, ${examID}, '${score}')`, (err) =>
+    {
+        if (err){console.log(err.message); res.status(500).json({message: err.message})}
+        else { res.status(200).json({message: "exam successfully submitted"}) }
+    })
+})
+
+
+
+
+
+
 //get report endpoint
 app.get('/getReport', (req, res) =>
 {

@@ -15,20 +15,25 @@
 
 .takeExamOption
 {
-    padding: 0.5em;
-    border: 1pt solid white;
-    margin-bottom: 1em;
-    font-size: 1.5em;
+    font-size: 1.3em;
+    cursor: pointer;
+    border-radius: 0.3em;
+    width: 100%
+}
+
+.takeExamText
+{
     cursor: pointer;
 }
 
-.takeExamOption:active
-{
-    border-color: blue
-}
 
 .takeExamRadio 
 { 
     margin-left: 0.5em;
     transform: scale(1.5); 
+}
+
+.takeExamNoExam
+{
+    font-size: 1.2em;
 }

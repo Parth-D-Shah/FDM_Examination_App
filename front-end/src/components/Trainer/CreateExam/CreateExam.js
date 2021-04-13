@@ -164,28 +164,28 @@ const CreateExam = ({loggedInUser}) => {
             if (currentQuestion+1 === questions.length)
             {
                 await Swal.fire(
+                {
+                    title: 'Do you want to create another question?',
+                    showCancelButton: true,
+                    confirmButtonText: `Yes`,
+                }).then((result) => 
+                {
+                    if (result.isConfirmed) 
                     {
-                        title: 'Do you want to create another question?',
-                        showCancelButton: true,
-                        confirmButtonText: `Yes`,
-                    }).then((result) => 
-                    {
-                        if (result.isConfirmed) 
+                        var currentQuestions = questions.slice()
+                        var newQuestion =
                         {
-                            var currentQuestions = questions.slice()
-                            var newQuestion =
-                            {
-                                questionText: "",
-                                answerOptions: 
-                                [
-                                    {answerText: "", answerMarks: ""},
-                                ]
-                            }
-                            currentQuestions.push(newQuestion)
-                            setQuestions(currentQuestions)
-                            setCurrentQuestion(currentQuestion+1)
+                            questionText: "",
+                            answerOptions: 
+                            [
+                                {answerText: "", answerMarks: ""},
+                            ]
                         }
-                    })
+                        currentQuestions.push(newQuestion)
+                        setQuestions(currentQuestions)
+                        setCurrentQuestion(currentQuestion+1)
+                    }
+                })
             }
 
             else {setCurrentQuestion(currentQuestion+1)}
@@ -204,8 +204,6 @@ const CreateExam = ({loggedInUser}) => {
     async function handleSubmitExamDetails (event)
     {
         event.preventDefault(event)
-        console.log(examStartDate)
-        console.log(examEndDate)
 
     
         if (examStartDate >= examEndDate || new Date(examStartDate) <= new Date())
@@ -254,7 +252,6 @@ const CreateExam = ({loggedInUser}) => {
         {
             if (result.isConfirmed) 
             {
-                console.log(questions)
                 try
                 {
                     await Axios.post("http://localhost:3001/createExam", { examTitle:examTitle, examDescription:examDescription, examStartDate:examStartDate, examEndDate:examEndDate, questions:questions }, {withCredentials: true})
