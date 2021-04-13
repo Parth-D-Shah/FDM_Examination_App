@@ -328,5 +328,14 @@ app.post("/createExam", (req, res) =>
     })
 })
 
+//get report endpoint
+app.get('/getReport', (req, res) =>
+{
+    db.all(`SELECT id, topic, grade, date FROM report`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
 
+        else { res.status(200).json(row) }
+    })
+})
 

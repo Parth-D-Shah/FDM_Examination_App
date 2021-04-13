@@ -1,8 +1,31 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import './ViewResults.css';
 import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap'; // Container for all Rows/Components
+import Axios from 'axios' // for handling API Call
 
 const Dashboard = ({loggedInUser}) => {
+        // Effect Hook 
+        useEffect( () =>
+        {
+                async function fetchReport ()
+                {
+                var systemUsersResportData = null
+                try
+                {
+                        var systemUsersReport = await Axios.get("http://localhost:3001/getReport", {withCredentials: true })
+                        systemUsersResportData = systemUsersReport.data
+                        //console.log(systemUsersResportData)
+                        setSystemUsers(systemUsersResportData)
+                }
+                catch (err) 
+                { 
+                        console.log(err)
+                }
+                }
+                
+                fetchReport()
+        }, [])
+
 
     return (
             <div>
