@@ -5,78 +5,74 @@ import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap'; // Containe
 import {useState, useEffect} from 'react'; // React states to store API info
 import Axios from 'axios' // for handling API Call
 
-const Dashboard = ({loggedInUser}) => {
-        // Effect Hook 
-        useEffect( () =>
+const ViewResults = ({loggedInUser}) => {
+
+    function padDigits(number, digits) {return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number}
+    
+    const [results, setResults] = useState(null)
+
+
+    //Effect Hook 
+    useEffect( () =>
+    {
+        async function fetchResults ()
         {
-                async function fetchReport ()
-                {
-                var systemUsersResportData = null
-                try
-                {
-                        var systemUsersReport = await Axios.get("http://localhost:3001/getReport", {withCredentials: true })
-                        systemUsersResportData = systemUsersReport.data
-                        //console.log(systemUsersResportData)
-                        //setSystemUsers(systemUsersResportData)
-                }
-                catch (err) 
-                { 
-                        console.log(err)
-                }
-                }
-                
-                fetchReport()
-        }, [])
+            try
+            {
+                var resultsResponse = await Axios.post("http://localhost:3001/getResults", { userID:parseInt(loggedInUser.id) }, {withCredentials: true })
+                setResults(resultsResponse.data)
+            }
+            catch (err) {console.log(err)}
+        }
+        
+        fetchResults()
+
+    }, [])
+    
+
+    if (results === null || results.length === 0)
+    {
+        return (
+            <p className="takeExamNoExam mt-4 text-center"> You currently have no results to view </p>
+        )
+    }
 
 
     return (
-            <div>
-                <table>
-                        <tr>
-                                <th>Exam ID</th>
-                                <th>Module</th>
-                                <th>Grade</th>
-                                <th>Date</th>
+        <div className="mt-4 viewResultsSection mx-auto">     
+            <table>
+                <tr>
+                    <th>Exam ID</th>
+                    <th>Exam Title</th>
+                    <th>Score</th>
+                    <th>Grade</th>
+                    <th>Date</th>
+                </tr>
+
+                
+                {results.map((result, index) =>
+                {
+                    var grade = Math.round(eval(result.score)*100)
+                    var examDate = new Date(result.date).toLocaleDateString('en-GB')
+                    var colourGrade = "nothing"
+                    if (grade < 50) {colourGrade="fail"}
+
+                    return (
+                        <tr id={colourGrade} key={index}>
+                            <td> {padDigits(result.examID, 5)} </td>
+                            <td> {result.examTitle} </td>
+                            <td> {result.score} </td>
+                            <td> {grade+"%"} </td>
+                            <td> {examDate} </td>
                         </tr>
-                        <tr>
-                                <td>00001</td>
-                                <td>FDME1290 - Mathematics</td>
-                                <td>82%</td>
-                                <td>25/03/2021</td>
-                        </tr>
-                        <tr>
-                                <td>00003</td>
-                                <td>FDME7240 - Elementary Physics</td>
-                                <td>55%</td>
-                                <td>06/04/2021</td>
-                        </tr>
-                        <tr>
-                                <td>00004</td>
-                                <td>FDME0830 - Geography</td>
-                                <td>88%</td>
-                                <td>07/04/2021</td>
-                        </tr>
-                        <tr>
-                                <td>00009</td>
-                                <td>FDME5890 - English Language</td>
-                                <td>60%</td>
-                                <td>09/04/2021</td>
-                        </tr>
-                        <tr id="fail">
-                                <td>00010</td>
-                                <td>FDME5880 - English Literature</td>
-                                <td>48%</td>
-                                <td>09/04/2021</td>
-                        </tr>
-                        <tr>
-                                <td>00015</td>
-                                <td>FDME4440 - Biology</td>
-                                <td>64%</td>
-                                <td>13/04/2021</td>
-                        </tr>
-                </table>
-            </div>
+                    )
+                })}
+
+
+                
+            </table>
+        </div>
     )
-    }
-    
-    export default Dashboard
+}
+
+export default ViewResults

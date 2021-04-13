@@ -4,7 +4,7 @@ import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap'; // Containe
 
 import Swal from 'sweetalert2'
 
-const YourAccount = ({loggedInUser}) => {
+const ManageTickets = ({loggedInUser}) => {
     async function handleTicketSubmit(event)
     {
         event.preventDefault(event);
@@ -72,4 +72,4 @@ const YourAccount = ({loggedInUser}) => {
     )
 }
     
-export default YourAccount
+export default ManageTickets

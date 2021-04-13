@@ -44,6 +44,8 @@ const Dashboard = () => {
 
     const changeScreen = (e) => {setChosenScreen(e.target.classList[0])} 
 
+    function signOut() {window.location.reload();}
+
     // Effect Hook
     useEffect( () =>
     {
@@ -100,7 +102,7 @@ const Dashboard = () => {
                             })}
 
                         </Nav>
-                        <Button className="outlineButton ml-2" variant="outline-primary">Sign Out</Button>
+                        <Button onClick={signOut} className="outlineButton ml-2" variant="outline-primary">Sign Out</Button>
                     </Navbar.Collapse>
                 
                 </Container>

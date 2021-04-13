@@ -415,22 +415,31 @@ app.post('/submitExam', (req, res) =>
 {
     const {userID, examID, score} = req.body
 
-    db.run(`INSERT INTO result (userID, examID, score) VALUES (${userID}, ${examID}, '${score}')`, (err) =>
+    db.get(`SELECT title from exam where id=${examID}`, (err, row) =>
     {
         if (err){console.log(err.message); res.status(500).json({message: err.message})}
-        else { res.status(200).json({message: "exam successfully submitted"}) }
+        else
+        {
+            var examTitle = row.title
+            const todayDate = new Date()
+
+            db.run(`INSERT INTO result (userID, examID, examTitle, score, date) VALUES (${userID}, ${examID}, '${examTitle}','${score}', '${todayDate}')`, (err) =>
+            {
+                if (err){console.log(err.message); res.status(500).json({message: err.message})}
+                else { res.status(200).json({message: "exam successfully submitted"}) }
+            })
+        }
     })
 })
 
 
 
-
-
-
 //get report endpoint
-app.get('/getReport', (req, res) =>
+app.post('/getResults', (req, res) =>
 {
-    db.all(`SELECT id, topic, grade, date FROM report`, (err, row) =>
+    const {userID} = req.body
+    
+    db.all(`SELECT examID, examTitle, score, date FROM result WHERE userID=${userID}`, (err, row) =>
     {
         if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
 

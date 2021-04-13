@@ -58,7 +58,7 @@ const Sysadmin = ({changeScreen}) => {
                                     <br /><br />
                                 </Card.Text>
                                 <div className="d-flex justify-content-center">
-                                    <Button className="ViewResults normalButton" variant="primary" onClick={handleChangeScreen}> Get Support </Button>
+                                    <Button className="ViewResults normalButton" variant="primary" onClick={handleChangeScreen}> View Results </Button>
                                 </div>
                             </Card.Body>
                         </Card>

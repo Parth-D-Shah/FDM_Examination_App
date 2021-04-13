@@ -143,16 +143,20 @@ const TakeExam = ({loggedInUser}) => {
             if (briefExplanations[i] === null || briefExplanations[i] === "")
             {
                 invalidAttempt = true
-                await Swal.fire
-                ({
-                    icon: 'error',
-                    title: 'Cannot submit your attempt',
-                    text: 'You must provide a brief explanation for each question'
-                })
             }
         }
 
-        if (invalidAttempt === false)
+        if (invalidAttempt === true)
+        {
+            await Swal.fire
+            ({
+                icon: 'error',
+                title: 'Cannot submit your attempt',
+                text: 'You must provide a brief explanation for each question'
+            })
+        }
+
+        else if (invalidAttempt === false)
         {
             await Swal.fire(
             {

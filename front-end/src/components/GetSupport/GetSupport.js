@@ -4,7 +4,7 @@ import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap'; // Containe
 import Swal from 'sweetalert2'
 import './GetSupport.css'
 
-const Dashboard = ({loggedInUser}) => {
+const GetSupport = ({loggedInUser}) => {
     async function handleTicketSubmit(event)
     {
         event.preventDefault(event);
@@ -46,4 +46,4 @@ const Dashboard = ({loggedInUser}) => {
     )
     }
     
-    export default Dashboard
+    export default GetSupport

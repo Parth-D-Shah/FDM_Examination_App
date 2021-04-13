@@ -5,7 +5,7 @@ import iconYourAccount from '../../assets/your-account-blue.png';
 import iconCreateExam from '../../assets/create-exam-blue.png';
 import iconTicket from '../../assets/ticket-blue.png';
 
-const Sysadmin = ({changeScreen}) => {
+const Trainer = ({changeScreen}) => {
     function handleChangeScreen (e) {changeScreen(e)}
     
     return (
@@ -61,4 +61,4 @@ const Sysadmin = ({changeScreen}) => {
     )
 }
 
-export default Sysadmin
+export default Trainer
