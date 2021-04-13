@@ -30,7 +30,7 @@ const Login = ({updateLoggedIn}) => {
             await Axios.post("http://localhost:3001/login", { email: email, password: password }, {withCredentials: true })
             updateLoggedIn(true)   
         }
-        catch (err) {console.log(err.response.data.message); setLoginFailed(true)}
+        catch (err) {console.log(err.response); setLoginFailed(true)}
 
     }
 

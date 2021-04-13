@@ -45,7 +45,6 @@ const TakeExam = ({loggedInUser}) => {
         async function fetchExams ()
         {
             var takenExams = await fetchTakenExams()
-            console.log(takenExams)
 
             try
             {

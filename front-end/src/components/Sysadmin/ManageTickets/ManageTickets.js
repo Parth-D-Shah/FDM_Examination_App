@@ -1,73 +1,118 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
 import './ManageTickets.css';
-import {Form, Button, ButtonGroup, Col, Row} from 'react-bootstrap'; // Container for all Rows/Components
+import {Button, Col, Row} from 'react-bootstrap'; // Container for all Rows/Components
 
+import {useState, useEffect} from 'react'; // React states to store API info
+
+import Axios from 'axios' // for handling API Call
 import Swal from 'sweetalert2'
 
+
 const ManageTickets = ({loggedInUser}) => {
-    async function handleTicketSubmit(event)
+
+    function padDigits(number, digits) {return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number}
+
+    const [tickets, setTickets] = useState([])
+    const [ticketSolved, setTicketSolved] = useState(null)
+
+    //Effect Hook 
+    useEffect( () =>
     {
-        event.preventDefault(event);
-        Swal.fire({
-            title: 'Are you sure the ticket has been solved?',
-            showDenyButton: true,
+        async function fetchTickets ()
+        {
+            try
+            {
+                var ticketsResponse = await Axios.get("http://localhost:3001/getTickets", {withCredentials: true })
+                setTickets(ticketsResponse.data)
+            }
+            catch (err) {console.log(err)}
+        }
+        
+        fetchTickets()
+
+    }, [ticketSolved])
+    
+    
+    async function handleSolveTicket(event)
+    {
+        var ticketid = event.target.classList[0]
+
+        await Swal.fire(
+        {
+            title: 'Are you sure you want to resolve this ticket?',
+            showCancelButton: true,
             confirmButtonText: `Yes`,
-            denyButtonText: `Cancel`,
-        }).then((result) => {
-            if (result.isConfirmed) {
-            Swal.fire('Saved!', '', 'success')
-            } else if (result.isDenied) {
-            Swal.fire('Changes are not saved', '', 'info')
+        }).then( async (result) =>
+        {
+            if (result.isConfirmed) 
+            {
+                try
+                {
+                    await Axios.post("http://localhost:3001/deleteTicket", { ticketID:ticketid }, {withCredentials: true})
+                    
+                    await Swal.fire
+                    ({
+                        icon: 'success',
+                        title: 'Ticket successfully resolved!',
+                    })
+                    setTicketSolved(ticketid)
+                }
+                
+                catch (err) 
+                { 
+                    console.log(err.response)
+                    await Swal.fire
+                    ({
+                        icon: 'error',
+                        title: 'Ticket has not been resolved in database',
+                        text: err.response.data
+                    })
+                }
             }
         })
+
+    }
+
+    
+    
+    if (tickets.length === 0)
+    {
+        return (
+            <p className="takeExamNoExam mt-4 text-center"> There are currently no tickets to resolve! </p>
+        )
     }
 
     return (
-        <div>
-            <div id='box'>
-                Ticket ID: 00001<br />
-                User ID: 00003<br />
-                Account Type: Trainee<br />
-                Ticket Type: Extenuating Circumstances<br />
-                Futher Information: Unable to attend the Exam this week due to being ill.<br />
-                <Form onSubmit={handleTicketSubmit} col=''>
-                    <ButtonGroup className="btnGroup">
-                        <Button className="btnSubmit" variant="primary" type="submit">
-                            Solved
-                        </Button>
-                    </ButtonGroup>
-                </Form>
-            </div>
-            <br />
-            <div id='box'>
-                Ticket ID: 00002<br />
-                User ID: 00004<br />
-                Account Type: Trainee<br />
-                Ticket Type: Extenuating Circumstances<br />
-                Futher Information: I had internet issues so i was not able to do the exam today.<br />
-                <Form onSubmit={handleTicketSubmit} col=''>
-                    <ButtonGroup className="btnGroup">
-                        <Button className="btnSubmit" variant="primary" type="submit">
-                            Solved
-                        </Button>
-                    </ButtonGroup>
-                </Form>
-            </div>
-            <br />
-            <div id='box'>
-                Ticket ID: 00003<br />
-                User ID: 00002<br />
-                Account Type: Trainer<br />
-                Ticket Type: Bug/Error<br />
-                Futher Information: I recieved the following error when trying to access a students exam results: HTTP ERROR 401 (UNAUTHORIZED).<br />
-                <Form onSubmit={handleTicketSubmit} col=''>
-                    <ButtonGroup className="btnGroup">
-                        <Button className="btnSubmit" variant="primary" type="submit">
-                            Solved
-                        </Button>
-                    </ButtonGroup>
-                </Form>
-            </div>
+        <div className="manageTicketsSection mx-auto mt-4">
+
+            {tickets.map((ticket, index) =>
+            {
+                return (
+                    <div key={index} className="mb-4" id='box'>
+                        <Row>
+                            <Col>Ticket ID:</Col>
+                            <Col>User ID:</Col>
+                            <Col>Account Type:</Col>
+                            <Col>Ticket Type:</Col>
+                        </Row>
+        
+                        <Row>
+                            <Col> <strong>{padDigits(ticket.id, 5)}</strong> </Col>
+                            <Col> <strong>{padDigits(ticket.userID, 5)}</strong> </Col>
+                            <Col> <strong>{ticket.accountType}</strong> </Col>
+                            <Col> <strong>{ticket.ticketType}</strong> </Col>
+                        </Row>
+                        
+                        <p className="mt-2 mb-0">Futher Information:</p>
+                        <p className="m-0"> {ticket.ticketDescription} </p>
+        
+                        <Button onClick={handleSolveTicket} className={ticket.id + " mt-3 btnTicketSolved normalButton"} variant="primary"> Resolved </Button>
+                    </div>
+                )
+            })}
+            
+
+        
         </div>
     )
 }

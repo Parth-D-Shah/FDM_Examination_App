@@ -434,7 +434,6 @@ app.post('/submitExam', (req, res) =>
 
 
 
-//get report endpoint
 app.post('/getResults', (req, res) =>
 {
     const {userID} = req.body
@@ -446,4 +445,54 @@ app.post('/getResults', (req, res) =>
         else { res.status(200).json(row) }
     })
 })
+
+
+app.post('/getUserTickets', (req, res) =>
+{
+    const {userID} = req.body
+    
+    db.all(`SELECT id, ticketType, ticketDescription from ticket WHERE userID=${userID}`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else { res.status(200).json(row) }
+    })
+})
+
+app.post('/submitTicket', (req, res) =>
+{
+    const {userID, accountType, ticketType, ticketDescription} = req.body
+    
+    db.run(`INSERT INTO ticket (userID, accountType, ticketType, ticketDescription) VALUES (${userID}, '${accountType}', '${ticketType}','${ticketDescription}')`, (err) =>
+    {
+        if (err){console.log(err.message); res.status(500).json({message: err.message})}
+        else { res.status(200).json({message: "ticket successfully submitted"}) }
+    })
+})
+
+app.get('/getTickets', (req, res) =>
+{
+    
+    db.all(`SELECT * from ticket`, (err, row) =>
+    {
+        if (err) { console.log(err.message); res.status(500).json({message: err.message}) }
+
+        else { res.status(200).json(row) }
+    })
+})
+
+app.post("/deleteTicket", (req, res) =>
+{
+    const {ticketID} = req.body
+    
+    db.run(`DELETE from ticket WHERE id=${ticketID}`, (err) =>
+    {
+        if (err) {console.log(err.message); res.status(500).json({message: err.message})}
+        else {res.status(200).json({message: "ticket successfully deleted"})}
+    })
+})
+
+
+
+
 

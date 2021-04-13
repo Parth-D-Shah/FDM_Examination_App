@@ -1,8 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css' // Bootstrap css
-import {Button, Card, CardDeck, CardColumns, Col, Row} from 'react-bootstrap'; // Container for all Rows/Components
+import {Button, Card, Col, Row} from 'react-bootstrap'; // Container for all Rows/Components
 
 import iconYourAccount from '../../assets/your-account-blue.png';
-import iconManageUsers from '../../assets/manage-users-blue.png';
 import iconTicket from '../../assets/ticket-blue.png';
 import iconTakeExam from '../../assets/take-exam-blue.png';
 import iconViewResults from '../../assets/view-results-blue.png';
